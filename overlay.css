@@ -36,3 +36,8 @@
 .katex.hoverlatex-hover {
   cursor: pointer;
 }
+
+.MathJax_Display.hoverlatex-hover,
+.MathJax.hoverlatex-hover {
+  cursor: pointer;
+}

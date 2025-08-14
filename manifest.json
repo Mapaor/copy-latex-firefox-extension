@@ -1,13 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Hover LaTeX for KaTeX/MathML",
+  "name": "Copy LaTeX (KaTeX/MathJax)",
   "version": "1.0.0",
-  "description": "Mostra la LaTeX de l'annotation MathML quan pases el cursor per sobre d'una expressió (KaTeX/MathJax/MathML).",
+  "description": "Allows copying LaTeX code when hovering mathematical expressions in websites like ChatGPT, DeepSeek, math blogs, etc.",
   "icons": { "48": "icon48.png" },
-  "permissions": [
-    "clipboardWrite"
-  ],
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": [],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

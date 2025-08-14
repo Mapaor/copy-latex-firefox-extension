@@ -1,4 +1,4 @@
-console.log("[HoverLatex] content script loaded (Firefox)");
+console.log("[HoverLatex] content script loaded (Firefox) - KaTeX and MathJax support enabled");
 
 let overlay;
 let currentTarget = null;
@@ -17,6 +17,38 @@ function findAnnotationTex(el) {
     katexEl.getAttribute('data-latex') ||
     katexEl.getAttribute('aria-label');
   if (dataLatex && dataLatex.trim()) return dataLatex.trim();
+
+  return null;
+}
+
+function findMathJaxTex(el) {
+  // Check for MathJax display equations
+  const mathJaxDisplay = el.closest('.MathJax_Display');
+  if (mathJaxDisplay) {
+    // Look for the script element after the display div
+    let sibling = mathJaxDisplay.nextElementSibling;
+    while (sibling) {
+      if (sibling.tagName === 'SCRIPT' && 
+          sibling.type === 'math/tex; mode=display') {
+        return sibling.textContent.trim();
+      }
+      sibling = sibling.nextElementSibling;
+    }
+  }
+
+  // Check for MathJax inline equations
+  const mathJaxInline = el.closest('.MathJax');
+  if (mathJaxInline && mathJaxInline.id && mathJaxInline.id.includes('MathJax-Element-')) {
+    // Look for the script element after the MathJax span
+    let sibling = mathJaxInline.nextElementSibling;
+    while (sibling) {
+      if (sibling.tagName === 'SCRIPT' && 
+          sibling.type === 'math/tex') {
+        return sibling.textContent.trim();
+      }
+      sibling = sibling.nextElementSibling;
+    }
+  }
 
   return null;
 }
@@ -75,19 +107,38 @@ function copyLatex(tex) {
 }
 
 document.addEventListener('mouseover', (e) => {
+  // Check for KaTeX elements
   const katex = e.target.closest('.katex');
-  if (!katex) return;
+  if (katex) {
+    const tex = findAnnotationTex(katex);
+    if (tex) {
+      currentTarget = katex;
+      katex.classList.add('hoverlatex-hover');
+      showOverlay(katex, tex);
+      return;
+    }
+  }
 
-  const tex = findAnnotationTex(katex);
-  if (tex) {
-    currentTarget = katex;
-    katex.classList.add('hoverlatex-hover');
-    showOverlay(katex, tex);
+  // Check for MathJax elements
+  const mathJaxDisplay = e.target.closest('.MathJax_Display');
+  const mathJaxInline = e.target.closest('.MathJax');
+  
+  if (mathJaxDisplay || (mathJaxInline && mathJaxInline.id && mathJaxInline.id.includes('MathJax-Element-'))) {
+    const mathElement = mathJaxDisplay || mathJaxInline;
+    const tex = findMathJaxTex(mathElement);
+    if (tex) {
+      currentTarget = mathElement;
+      mathElement.classList.add('hoverlatex-hover');
+      showOverlay(mathElement, tex);
+    }
   }
 });
 
 document.addEventListener('mouseout', (e) => {
-  if (currentTarget && !e.relatedTarget?.closest('.katex')) {
+  if (currentTarget && 
+      !e.relatedTarget?.closest('.katex') && 
+      !e.relatedTarget?.closest('.MathJax_Display') && 
+      !e.relatedTarget?.closest('.MathJax')) {
     currentTarget.classList.remove('hoverlatex-hover');
     hideOverlay();
     currentTarget = null;
@@ -95,9 +146,23 @@ document.addEventListener('mouseout', (e) => {
 });
 
 document.addEventListener('click', (e) => {
+  // Check for KaTeX elements
   const katex = e.target.closest('.katex');
   if (katex) {
     const tex = findAnnotationTex(katex);
+    if (tex) {
+      copyLatex(tex);
+      return;
+    }
+  }
+
+  // Check for MathJax elements
+  const mathJaxDisplay = e.target.closest('.MathJax_Display');
+  const mathJaxInline = e.target.closest('.MathJax');
+  
+  if (mathJaxDisplay || (mathJaxInline && mathJaxInline.id && mathJaxInline.id.includes('MathJax-Element-'))) {
+    const mathElement = mathJaxDisplay || mathJaxInline;
+    const tex = findMathJaxTex(mathElement);
     if (tex) {
       copyLatex(tex);
     }

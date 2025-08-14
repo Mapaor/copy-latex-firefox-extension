@@ -1,39 +1,36 @@
 # CopyLaTeX
 
-És una extensió de Firefox que permet copiar ràpidament codi LaTeX (KaTeX o MathJax) d'equacions mostrades a llocs web com ChatGPT, DeepSeek o qualsevol blog que utilitzi equacions. Funciona simplement passant el ratolí per sobre i fent un click per copiar l'expressió LaTeX.
+A Firefox extension that lets you quickly copy LaTeX code (KaTeX or MathJax) from equations displayed on websites like ChatGPT, DeepSeek, or any blog using mathematical equations. It works simply by hovering over an equation and clicking to copy the LaTeX expression.
 
-
-## Com funciona a nivell tècnic
+## How it works technically
 
 1. **Content Script (`content.js`)**:
-   - Detecta automàticament tots els elements `<span class="katex">` dins la pàgina.
-   - Extreu el codi LaTeX de dins  `<annotation encoding="application/x-tex">`.
-   - Mostra un overlay quan es passa el ratolí sobre la fórmula.
-   - Permet fer clic per copiar el codi al clipboard mitjançant `navigator.clipboard.writeText()`.
-   - Utilitza un `<svg>` inline per no deprendre de fitxers externs
+   - Automatically detects all `<span class="katex">` elements on the page.
+   - Extracts the LaTeX code from `<annotation encoding="application/x-tex">`.
+   - Shows an overlay when hovering over the equation.
+   - Allows clicking to copy the code to clipboard using `navigator.clipboard.writeText()`.
+   - Uses an inline `<svg>` to avoid external file dependencies.
 
 2. **CSS (`overlay.css`)**:
-   - Estil del overlay: fons blanc, border i shadow subtil.
-   - Text gran i llegible.
-   - Centrat sobre la fórmula KaTeX.
-   - Cursor `pointer`.
+   - Overlay styling: white background, subtle border and shadow.
+   - Large, readable text.
+   - Centered over the KaTeX formula.
+   - `pointer` cursor.
 
-3. **Declaració extensió `manifests.json`**:
-   - Demana el permís `clipboardWrite`.
-   - Injecte el `content.js` i el `overlay.css`.
+3. **Extension declaration `manifest.json`**:
+   - Injects `content.js` and `overlay.css`.
 
-
-## GIFs d'exemple
+## Example GIFs
 #### KaTeX
 <img src="gif-demo-katex.gif" alt="Demo-KaTeX" width="800">
 
 #### MathJax
 <img src="gif-demo-mathjax.gif" alt="Demo-MathJax" width="800">
 
-## Llocs web on és útil
-En general a qualsevol blog o web relacionat amb les matemàtiques, la física o l'enginyeria. Alguns exemples típics són:
+## Useful websites
+Generally any math, physics, or engineering-related blog or website. Some typical examples:
 - KaTeX: ChatGPT, DeepSeek, Notion...
 - MathJax: GitHub, Stack Exchange, ProofWiki...
 
-# Relacionat
-Queda pendent de fer una versió també per Chrome.
+# Related
+A Chrome version is still pending development.

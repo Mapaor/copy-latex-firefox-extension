@@ -12,5 +12,10 @@
       "css": ["overlay.css"],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "copy-latex@mapaor"
+    }
+  }
 }

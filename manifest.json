@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Hover LaTeX for KaTeX/MathML",
+  "version": "1.0.0",
+  "description": "Mostra la LaTeX de l’annotation MathML quan pases el cursor per sobre d'una expressió (KaTeX/MathJax/MathML).",
+  "icons": { "48": "icon48.png" },
+  "permissions": [
+    "clipboardWrite"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["overlay.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

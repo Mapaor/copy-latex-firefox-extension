@@ -32,6 +32,15 @@ Generally any math, physics, or engineering-related blog or website. Some typica
 - KaTeX: ChatGPT, DeepSeek, Notion...
 - MathJax: Stack Exchange, ProofWiki...
 
+## Host premissions and speed
+The javascript source code is extremely simple and available [here](https://github.com/Mapaor/copy-latex-firefox-extension/blob/main/content.js). It loads after everything and is blazingly fast.
+
+However you can always customize in which hosts (websites) the extension loads or not:
+
+<img src="toggle-firefox.jpg" alt="Manage-extension-permissions" width="800">
+
+This is done in "Firefox Settings > Extensions & Themes" (or simply search `about:addons`), clicking the extension and choosing the tab "Premissions and Data".
+
 ## Links
 - Firefox Addon page: _Pending_
 - GitHub Repo: [https://github.com/Mapaor/copy-latex-firefox-extension](https://github.com/Mapaor/copy-latex-firefox-extension)

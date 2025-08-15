@@ -32,6 +32,14 @@ Generally any math, physics, or engineering-related blog or website. Some typica
 - KaTeX: ChatGPT, DeepSeek, Notion...
 - MathJax: GitHub, Stack Exchange, ProofWiki...
 
+#### GitHub Test
+
+Given Euler's formula $$e^{ix} = \cos(x) + i*\sin(x)$ for $x=\pi$ we get the famous Euler equation:
+
+$$e^{i\pi}+1=0$$
+
+Which is a beautiful equation.
+
 ## Links
 - Firefox Addon page: _Pending_
 - GitHub Repo: [https://github.com/Mapaor/copy-latex-firefox-extension](https://github.com/Mapaor/copy-latex-firefox-extension)

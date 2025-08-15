@@ -30,7 +30,7 @@ A Firefox extension that lets you quickly copy LaTeX code (KaTeX or MathJax) fro
 ## Popular Sites Using MathJax/KaTeX
 Generally any math, physics, or engineering-related blog or website. Some typical examples:
 - KaTeX: ChatGPT, DeepSeek, Notion...
-- MathJax: Math Stack Exchange, ProofWiki...
+- MathJax: Stack Exchange, ProofWiki...
 
 ## Links
 - Firefox Addon page: _Pending_
@@ -38,4 +38,4 @@ Generally any math, physics, or engineering-related blog or website. Some typica
 - README as a website: [https://mapaor.github.io/copy-latex-firefox-extension/](https://mapaor.github.io/copy-latex-firefox-extension/)
 
 # Related
-A Chrome version is still pending development.
+There is also a Chrome version of this extension: [https://github.com/Mapaor/copy-latex-chrome-extension](https://github.com/Mapaor/copy-latex-chrome-extension) 

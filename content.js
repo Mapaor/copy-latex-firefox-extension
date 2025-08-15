@@ -1,5 +1,3 @@
-console.log("[HoverLatex] content script loaded (Firefox) - KaTeX and MathJax support enabled");
-
 let overlay;
 let currentTarget = null;
 

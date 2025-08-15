@@ -41,6 +41,12 @@ However you can always customize in which hosts (websites) the extension loads o
 
 This is done in "Firefox Settings > Extensions & Themes" (or simply search `about:addons`), clicking the extension and choosing the tab "Premissions and Data".
 
+In case you turn off the "all sites" toggle option, you can also add manual sites that are not in the default list.
+
+<img src="manual-specific-site.jpg" alt="Manage-extension-permissions" width="800">
+
+And now the custom site should appear as a new toggle in the "Permissions and data" tab.
+
 ## Links
 - Firefox Addon page: _Pending_
 - GitHub Repo: [https://github.com/Mapaor/copy-latex-firefox-extension](https://github.com/Mapaor/copy-latex-firefox-extension)

@@ -34,7 +34,7 @@ Generally any math, physics, or engineering-related blog or website. Some typica
 
 #### GitHub Test
 
-Given Euler's formula $$e^{ix} = \cos(x) + i*\sin(x)$ for $x=\pi$ we get the famous Euler equation:
+Given Euler's formula $e^{ix} = \cos(x) + i*\sin(x)$ for $x=\pi$ we get the famous Euler equation:
 
 $$e^{i\pi}+1=0$$
 

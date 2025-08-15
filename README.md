@@ -30,15 +30,7 @@ A Firefox extension that lets you quickly copy LaTeX code (KaTeX or MathJax) fro
 ## Popular Sites Using MathJax/KaTeX
 Generally any math, physics, or engineering-related blog or website. Some typical examples:
 - KaTeX: ChatGPT, DeepSeek, Notion...
-- MathJax: GitHub, Stack Exchange, ProofWiki...
-
-#### GitHub Test
-
-Given Euler's formula $e^{ix} = \cos(x) + i*\sin(x)$ for $x=\pi$ we get the famous Euler equation:
-
-$$e^{i\pi}+1=0$$
-
-Which is a beautiful equation.
+- MathJax: Math Stack Exchange, ProofWiki...
 
 ## Links
 - Firefox Addon page: _Pending_

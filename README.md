@@ -25,7 +25,7 @@ A Firefox extension that lets you quickly copy LaTeX code (KaTeX or MathJax) fro
 <img src="gif-demo-katex.gif" alt="Demo-KaTeX" width="800">
 
 #### MathJax
-<img src="gif-demo-mathjax.gif" alt="Demo-MathJax" width="800"
+<img src="gif-demo-mathjax.gif" alt="Demo-MathJax" width="800">
 
 ## Popular Sites Using MathJax/KaTeX
 Generally any math, physics, or engineering-related blog or website. Some typical examples:

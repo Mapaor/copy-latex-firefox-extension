@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "description": "Hover and click to copy LaTeX expressions on ChatGPT, DeepSeek, Stack Exchange and other math-related websites.",
   "icons": { "48": "icon48.png" },
-  "permissions": ["activeTab"],
   "host_permissions": [
     "https://chatgpt.com/*",
     "https://chat.deepseek.com/*",

@@ -2,9 +2,18 @@
   "manifest_version": 3,
   "name": "Copy LaTeX (KaTeX/MathJax)",
   "version": "1.0.0",
-  "description": "Allows copying LaTeX code when hovering mathematical expressions in websites like ChatGPT, DeepSeek, math blogs, etc.",
+  "description": "Hover and click to copy LaTeX expressions on ChatGPT, DeepSeek, Stack Exchange and other math-related websites.",
   "icons": { "48": "icon48.png" },
-  "host_permissions": [],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.deepseek.com/*",
+    "https://math.stackexchange.com/*",
+    "https://physics.stackexchange.com/*",
+    "https://proofwiki.org/*"
+  ],
+  "optional_host_permissions": [
+    "<all_urls>"
+  ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

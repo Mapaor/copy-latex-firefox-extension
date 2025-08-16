@@ -13,7 +13,8 @@ function findWikipediaTex(el) {
   // Check if it's a Wikipedia math image
   if (el.tagName === 'IMG' && 
       (el.classList.contains('mwe-math') || 
-       el.classList.contains('mwe-math-fallback-image-inline'))) {
+      el.classList.contains('mwe-math-fallback-image-inline') ||
+      el.classList.contains('mwe-math-fallback-image-display'))) {
     const alt = el.getAttribute('alt');
     if (alt && alt.trim()) {
       // Remove leading '{\displaystyle' and trailing '}'
@@ -178,7 +179,8 @@ document.addEventListener('mouseout', (e) => {
       !(isWikipediaOrWikiwand() && 
         e.relatedTarget?.tagName === 'IMG' && 
         (e.relatedTarget?.classList.contains('mwe-math') || 
-         e.relatedTarget?.classList.contains('mwe-math-fallback-image-inline')))) {
+        e.relatedTarget?.classList.contains('mwe-math-fallback-image-inline') ||
+        e.relatedTarget?.classList.contains('mwe-math-fallback-image-display')))) {
     currentTarget.classList.remove('hoverlatex-hover');
     hideOverlay();
     currentTarget = null;

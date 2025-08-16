@@ -2,6 +2,8 @@
 
 A Firefox extension that lets you quickly copy LaTeX code (KaTeX or MathJax) from equations displayed on websites like ChatGPT, DeepSeek, or any blog using mathematical equations. It works simply by hovering over an equation and clicking to copy the LaTeX expression.
 
+Version 1.1: Now it also works with with Wikipedia and Wikiwand images.
+
 ## How it works technically
 
 1. **Content Script (`content.js`)**:
@@ -26,6 +28,9 @@ A Firefox extension that lets you quickly copy LaTeX code (KaTeX or MathJax) fro
 
 #### MathJax
 <img src="gif-demo-mathjax.gif" alt="Demo-MathJax" width="800">
+
+#### Wikipedia images
+<img src="gif-demo-wikipedia.gif" alt="Demo-MathJax" width="800">
 
 ## Popular Sites Using MathJax/KaTeX
 Generally any math, physics, or engineering-related blog or website. Some typical examples:

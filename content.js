@@ -1,6 +1,33 @@
 let overlay;
 let currentTarget = null;
 
+function isWikipediaOrWikiwand() {
+  const hostname = window.location.hostname;
+  return hostname.endsWith('.wikipedia.org') || hostname === 'www.wikiwand.com';
+}
+
+function findWikipediaTex(el) {
+  // Only work on Wikipedia/Wikiwand sites
+  if (!isWikipediaOrWikiwand()) return null;
+  
+  // Check if it's a Wikipedia math image
+  if (el.tagName === 'IMG' && 
+      (el.classList.contains('mwe-math') || 
+       el.classList.contains('mwe-math-fallback-image-inline'))) {
+    const alt = el.getAttribute('alt');
+    if (alt && alt.trim()) {
+      // Remove leading '{\displaystyle' and trailing '}'
+      const match = alt.trim().match(/^\{\\displaystyle\s*([\s\S]*?)\}$/);
+      if (match) {
+        return match[1].trim();
+      }
+      return alt.trim();
+    }
+  }
+  
+  return null;
+}
+
 function findAnnotationTex(el) {
   const katexEl = el.closest('.katex');
   if (!katexEl) return null;
@@ -105,6 +132,17 @@ function copyLatex(tex) {
 }
 
 document.addEventListener('mouseover', (e) => {
+  // Check for Wikipedia math images first (only on Wikipedia/Wikiwand sites)
+  if (isWikipediaOrWikiwand()) {
+    const wikipediaTex = findWikipediaTex(e.target);
+    if (wikipediaTex) {
+      currentTarget = e.target;
+      e.target.classList.add('hoverlatex-hover');
+      showOverlay(e.target, wikipediaTex);
+      return;
+    }
+  }
+
   // Check for KaTeX elements
   const katex = e.target.closest('.katex');
   if (katex) {
@@ -136,7 +174,11 @@ document.addEventListener('mouseout', (e) => {
   if (currentTarget && 
       !e.relatedTarget?.closest('.katex') && 
       !e.relatedTarget?.closest('.MathJax_Display') && 
-      !e.relatedTarget?.closest('.MathJax')) {
+      !e.relatedTarget?.closest('.MathJax') &&
+      !(isWikipediaOrWikiwand() && 
+        e.relatedTarget?.tagName === 'IMG' && 
+        (e.relatedTarget?.classList.contains('mwe-math') || 
+         e.relatedTarget?.classList.contains('mwe-math-fallback-image-inline')))) {
     currentTarget.classList.remove('hoverlatex-hover');
     hideOverlay();
     currentTarget = null;
@@ -144,6 +186,15 @@ document.addEventListener('mouseout', (e) => {
 });
 
 document.addEventListener('click', (e) => {
+  // Check for Wikipedia math images first (only on Wikipedia/Wikiwand sites)
+  if (isWikipediaOrWikiwand()) {
+    const wikipediaTex = findWikipediaTex(e.target);
+    if (wikipediaTex) {
+      copyLatex(wikipediaTex);
+      return;
+    }
+  }
+
   // Check for KaTeX elements
   const katex = e.target.closest('.katex');
   if (katex) {

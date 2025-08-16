@@ -12,13 +12,15 @@
     "https://proofwiki.org/*",
     "https://*.notion.site/*",
     "https://www.notion.so/*",
-    "https://mathoverflow.net",
-    "https://publish.obsidian.md",
+    "https://*.wikipedia.org/*",
+    "https://www.wikiwand.com/*",
+    "https://mathoverflow.net/*",
+    "https://publish.obsidian.md/*",
     "https://nbviewer.org/*",
-    "https://www.phind.com",
-    "https://chat.mistral.ai",
-    "https://librechat-librechat.hf.space",
-    "https://www.perplexity.ai"
+    "https://www.phind.com/*",
+    "https://chat.mistral.ai/*",
+    "https://librechat-librechat.hf.space/*",
+    "https://www.perplexity.ai/*"
   ],
   "optional_host_permissions": [
     "<all_urls>"

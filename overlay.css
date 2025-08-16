@@ -45,6 +45,7 @@
 
 /* Wikipedia math images cursor pointer */
 img.mwe-math.hoverlatex-hover,
-img.mwe-math-fallback-image-inline.hoverlatex-hover {
+img.mwe-math-fallback-image-inline.hoverlatex-hover,
+img.mwe-math-fallback-image-display.hoverlatex-hover {
   cursor: pointer;
 }

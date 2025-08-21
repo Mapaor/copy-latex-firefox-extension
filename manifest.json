@@ -20,7 +20,8 @@
     "https://www.phind.com/*",
     "https://chat.mistral.ai/*",
     "https://librechat-librechat.hf.space/*",
-    "https://www.perplexity.ai/*"
+    "https://www.perplexity.ai/*",
+    "https://phys.libretexts.org/*"
   ],
   "optional_host_permissions": [
     "<all_urls>"

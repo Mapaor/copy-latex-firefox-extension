@@ -53,7 +53,7 @@ In case you turn off the "all sites" toggle option, you can also add manual site
 And now the custom site should appear as a new toggle in the "Permissions and data" tab.
 
 ## Links
-- Firefox Addon page: _Pending_
+- Firefox Add-on page: [https://addons.mozilla.org/en-US/firefox/addon/copy-latex](https://addons.mozilla.org/en-US/firefox/addon/copy-latex)
 - GitHub Repo: [https://github.com/Mapaor/copy-latex-firefox-extension](https://github.com/Mapaor/copy-latex-firefox-extension)
 - README as a website: [https://mapaor.github.io/copy-latex-firefox-extension/](https://mapaor.github.io/copy-latex-firefox-extension/)
 

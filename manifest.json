@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Copy LaTeX (KaTeX & MathJax & Wikipedia images)",
   "version": "1.1.0",
-  "description": "Hover and click to copy LaTeX expressions on ChatGPT, DeepSeek, Stack Exchange, Wikipedia and other math-related websites.",
+  "description": "Hover and click to copy LaTeX expressions on ChatGPT, DeepSeek, Wikipedia, Stack Exchange and other math-related websites.",
   "icons": { "48": "icon48.png" },
   "host_permissions": [
     "https://chatgpt.com/*",

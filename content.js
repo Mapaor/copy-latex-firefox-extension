@@ -3,6 +3,11 @@ function injectMathJaxPageScript() {
   const script = document.createElement('script');
   script.textContent = `
     (function() {
+      var mathjax = window.MathJax;
+      var version = mathjax && mathjax.version ? mathjax.version : null;
+      if (!mathjax || !(version && (version.startsWith('3') || version.startsWith('4')))) {
+        return;
+      }
       function getLatexForContainer(mjxContainer) {
         if (typeof MathJax !== 'undefined' && MathJax.startup && MathJax.startup.document && MathJax.startup.document.math) {
           let current = MathJax.startup.document.math.list;

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Copy LaTeX (KaTeX & MathJax & Wikipedia images)",
+  "name": "Copy LaTeX (KaTeX & MathJax & Wikipedia Imgs)",
   "version": "1.2.0",
   "description": "Hover and click to copy LaTeX expressions on ChatGPT, DeepSeek, Wikipedia, Stack Exchange and other math-related websites.",
   "icons": { "48": "icon48.png" },
@@ -14,6 +14,8 @@
     "https://www.notion.so/*",
     "https://*.wikipedia.org/*",
     "https://www.wikiwand.com/*",
+    "https://wikimedia.org/*",
+    "https://*.wikiversity.org/*",
     "https://mathoverflow.net/*",
     "https://publish.obsidian.md/*",
     "https://nbviewer.org/*",

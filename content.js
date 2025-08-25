@@ -1,3 +1,61 @@
+// Inject page script for MathJax v3 extraction
+function injectMathJaxPageScript() {
+  const script = document.createElement('script');
+  script.textContent = `
+    (function() {
+      function getLatexForContainer(mjxContainer) {
+        if (typeof MathJax !== 'undefined' && MathJax.startup && MathJax.startup.document && MathJax.startup.document.math) {
+          let current = MathJax.startup.document.math.list;
+          const targetHTML = mjxContainer.innerHTML;
+          while (current && current.data) {
+            const mathItem = current.data;
+            if (mathItem.typesetRoot && mathItem.typesetRoot.innerHTML === targetHTML) {
+              if (mathItem.math && typeof mathItem.math === 'string') {
+                return mathItem.math.trim();
+              }
+            }
+            current = current.next;
+            if (current === MathJax.startup.document.math.list) break;
+          }
+        }
+        return null;
+      }
+
+      document.addEventListener('mouseover', function(e) {
+        const mjx = e.target.closest('mjx-container');
+        if (mjx) {
+          const latex = getLatexForContainer(mjx);
+          if (latex) {
+            window.postMessage({ type: 'HoverLatex_MathJaxV3', latex, mjxId: mjx.getAttribute('ctxtmenu_counter') }, '*');
+          }
+        }
+      }, true);
+
+      document.addEventListener('click', function(e) {
+        const mjx = e.target.closest('mjx-container');
+        if (mjx) {
+          const latex = getLatexForContainer(mjx);
+          if (latex) {
+            window.postMessage({ type: 'HoverLatex_MathJaxV3', latex, mjxId: mjx.getAttribute('ctxtmenu_counter') }, '*');
+          }
+        }
+      }, true);
+    })();
+  `;
+  document.documentElement.appendChild(script);
+}
+
+injectMathJaxPageScript();
+
+// Listen for LaTeX messages from the page script
+let lastMathJaxV3Latex = null;
+window.addEventListener('message', function(event) {
+  if (event.source !== window) return;
+  if (event.data && event.data.type === 'HoverLatex_MathJaxV3') {
+    lastMathJaxV3Latex = event.data.latex;
+  }
+});
+
 let overlay;
 let currentTarget = null;
 
@@ -26,6 +84,35 @@ function findWikipediaTex(el) {
     }
   }
   
+  return null;
+}
+
+function findMathJaxV3Tex(el) {
+  // Check for MathJax v3 containers
+  const mjxContainer = el.closest('mjx-container');
+  if (!mjxContainer) {
+    return null;
+  }
+
+  // Use the last received LaTeX from the page script
+  if (lastMathJaxV3Latex) {
+    return lastMathJaxV3Latex;
+  }
+
+  // Fallback: try to find any associated script elements nearby
+  let current = mjxContainer;
+  for (let i = 0; i < 5; i++) { // Check a few siblings
+    if (current.nextElementSibling) {
+      current = current.nextElementSibling;
+      if (current.tagName === 'SCRIPT' && 
+          (current.type === 'math/tex' || current.type === 'math/tex; mode=display')) {
+        return current.textContent.trim();
+      }
+    } else {
+      break;
+    }
+  }
+
   return null;
 }
 
@@ -170,6 +257,18 @@ document.addEventListener('mouseover', (e) => {
     }
   }
 
+  // Check for MathJax v3 elements
+  const mjxContainer = e.target.closest('mjx-container');
+  if (mjxContainer) {
+    const tex = findMathJaxV3Tex(mjxContainer);
+    if (tex) {
+      currentTarget = mjxContainer;
+      mjxContainer.classList.add('hoverlatex-hover');
+      showOverlay(mjxContainer, tex);
+      return;
+    }
+  }
+
   // Check for MathJax elements
   const mathJaxDisplay = e.target.closest('.MathJax_Display, .MJXc-display');
   const mathJaxInline = e.target.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML');
@@ -188,6 +287,7 @@ document.addEventListener('mouseover', (e) => {
 document.addEventListener('mouseout', (e) => {
   if (currentTarget && 
       !e.relatedTarget?.closest('.katex') && 
+      !e.relatedTarget?.closest('mjx-container') &&
       !e.relatedTarget?.closest('.MathJax_Display, .MJXc-display') && 
       !e.relatedTarget?.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML') &&
       !(isWikipediaOrWikiwand() && 
@@ -215,6 +315,16 @@ document.addEventListener('click', (e) => {
   const katex = e.target.closest('.katex');
   if (katex) {
     const tex = findAnnotationTex(katex);
+    if (tex) {
+      copyLatex(tex);
+      return;
+    }
+  }
+
+  // Check for MathJax v3 elements
+  const mjxContainer = e.target.closest('mjx-container');
+  if (mjxContainer) {
+    const tex = findMathJaxV3Tex(mjxContainer);
     if (tex) {
       copyLatex(tex);
       return;

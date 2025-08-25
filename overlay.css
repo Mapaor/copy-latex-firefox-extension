@@ -39,7 +39,11 @@
 }
 
 .MathJax_Display.hoverlatex-hover,
-.MathJax.hoverlatex-hover {
+.MathJax.hoverlatex-hover,
+.mjx-chtml.hoverlatex-hover,
+.MathJax_CHTML.hoverlatex-hover,
+.MJXc-display.hoverlatex-hover,
+.MathJax_MathML.hoverlatex-hover {
   cursor: pointer;
 }
 

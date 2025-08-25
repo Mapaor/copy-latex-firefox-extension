@@ -49,7 +49,7 @@ function findAnnotationTex(el) {
 
 function findMathJaxTex(el) {
   // Check for MathJax display equations
-  const mathJaxDisplay = el.closest('.MathJax_Display');
+  const mathJaxDisplay = el.closest('.MathJax_Display, .MJXc-display');
   if (mathJaxDisplay) {
     // Look for the script element after the display div
     let sibling = mathJaxDisplay.nextElementSibling;
@@ -62,14 +62,28 @@ function findMathJaxTex(el) {
     }
   }
 
-  // Check for MathJax inline equations
-  const mathJaxInline = el.closest('.MathJax');
-  if (mathJaxInline && mathJaxInline.id && mathJaxInline.id.includes('MathJax-Element-')) {
-    // Look for the script element after the MathJax span
+  // Check for MathJax inline equations (various formats)
+  const mathJaxInline = el.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML');
+  if (mathJaxInline) {
+    // For traditional MathJax elements with IDs
+    if (mathJaxInline.id && mathJaxInline.id.includes('MathJax-Element-')) {
+      // Look for the script element after the MathJax span
+      let sibling = mathJaxInline.nextElementSibling;
+      while (sibling) {
+        if (sibling.tagName === 'SCRIPT' && 
+            sibling.type === 'math/tex') {
+          return sibling.textContent.trim();
+        }
+        sibling = sibling.nextElementSibling;
+      }
+    }
+    
+    // For newer MathJax formats (mjx-chtml, MathJax_CHTML)
+    // Look for script elements with math/tex type
     let sibling = mathJaxInline.nextElementSibling;
     while (sibling) {
       if (sibling.tagName === 'SCRIPT' && 
-          sibling.type === 'math/tex') {
+          (sibling.type === 'math/tex' || sibling.type === 'math/tex; mode=display')) {
         return sibling.textContent.trim();
       }
       sibling = sibling.nextElementSibling;
@@ -157,10 +171,10 @@ document.addEventListener('mouseover', (e) => {
   }
 
   // Check for MathJax elements
-  const mathJaxDisplay = e.target.closest('.MathJax_Display');
-  const mathJaxInline = e.target.closest('.MathJax');
+  const mathJaxDisplay = e.target.closest('.MathJax_Display, .MJXc-display');
+  const mathJaxInline = e.target.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML');
   
-  if (mathJaxDisplay || (mathJaxInline && mathJaxInline.id && mathJaxInline.id.includes('MathJax-Element-'))) {
+  if (mathJaxDisplay || mathJaxInline) {
     const mathElement = mathJaxDisplay || mathJaxInline;
     const tex = findMathJaxTex(mathElement);
     if (tex) {
@@ -174,8 +188,8 @@ document.addEventListener('mouseover', (e) => {
 document.addEventListener('mouseout', (e) => {
   if (currentTarget && 
       !e.relatedTarget?.closest('.katex') && 
-      !e.relatedTarget?.closest('.MathJax_Display') && 
-      !e.relatedTarget?.closest('.MathJax') &&
+      !e.relatedTarget?.closest('.MathJax_Display, .MJXc-display') && 
+      !e.relatedTarget?.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML') &&
       !(isWikipediaOrWikiwand() && 
         e.relatedTarget?.tagName === 'IMG' && 
         (e.relatedTarget?.classList.contains('mwe-math') || 
@@ -208,10 +222,10 @@ document.addEventListener('click', (e) => {
   }
 
   // Check for MathJax elements
-  const mathJaxDisplay = e.target.closest('.MathJax_Display');
-  const mathJaxInline = e.target.closest('.MathJax');
+  const mathJaxDisplay = e.target.closest('.MathJax_Display, .MJXc-display');
+  const mathJaxInline = e.target.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML');
   
-  if (mathJaxDisplay || (mathJaxInline && mathJaxInline.id && mathJaxInline.id.includes('MathJax-Element-'))) {
+  if (mathJaxDisplay || mathJaxInline) {
     const mathElement = mathJaxDisplay || mathJaxInline;
     const tex = findMathJaxTex(mathElement);
     if (tex) {

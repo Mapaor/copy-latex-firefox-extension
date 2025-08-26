@@ -64,14 +64,14 @@ window.addEventListener('message', function(event) {
 let overlay;
 let currentTarget = null;
 
-function isWikipediaOrWikiwand() {
+function isWikipedia() {
   const hostname = window.location.hostname;
-  return hostname.endsWith('.wikipedia.org') || hostname === 'www.wikiwand.com';
+  return hostname.endsWith('.wikipedia.org') || hostname === 'www.wikiwand.com' || hostname === "wikimedia.org" || hostname.endsWith(".wikiversity.org") || hostname.endsWith(".wikibooks.org");
 }
 
 function findWikipediaTex(el) {
   // Only work on Wikipedia/Wikiwand sites
-  if (!isWikipediaOrWikiwand()) return null;
+  if (!isWikipedia()) return null;
   
   // Check if it's a Wikipedia math image
   if (el.tagName === 'IMG' && 
@@ -240,7 +240,7 @@ function copyLatex(tex) {
 
 document.addEventListener('mouseover', (e) => {
   // Check for Wikipedia math images first (only on Wikipedia/Wikiwand sites)
-  if (isWikipediaOrWikiwand()) {
+  if (isWikipedia()) {
     const wikipediaTex = findWikipediaTex(e.target);
     if (wikipediaTex) {
       currentTarget = e.target;
@@ -295,7 +295,7 @@ document.addEventListener('mouseout', (e) => {
       !e.relatedTarget?.closest('mjx-container') &&
       !e.relatedTarget?.closest('.MathJax_Display, .MJXc-display') && 
       !e.relatedTarget?.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML') &&
-      !(isWikipediaOrWikiwand() && 
+      !(isWikipedia() && 
         e.relatedTarget?.tagName === 'IMG' && 
         (e.relatedTarget?.classList.contains('mwe-math') || 
         e.relatedTarget?.classList.contains('mwe-math-fallback-image-inline') ||
@@ -308,7 +308,7 @@ document.addEventListener('mouseout', (e) => {
 
 document.addEventListener('click', (e) => {
   // Check for Wikipedia math images first (only on Wikipedia/Wikiwand sites)
-  if (isWikipediaOrWikiwand()) {
+  if (isWikipedia()) {
     const wikipediaTex = findWikipediaTex(e.target);
     if (wikipediaTex) {
       copyLatex(wikipediaTex);

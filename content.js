@@ -262,6 +262,18 @@ document.addEventListener('mouseover', (e) => {
     }
   }
 
+  // Check for math elements with data-math
+  const dataMathEl = e.target.closest('[data-math]');
+  if (dataMathEl) {
+    const tex = dataMathEl.getAttribute('data-math');
+    if (tex && tex.trim()) {
+      currentTarget = dataMathEl;
+      dataMathEl.classList.add('hoverlatex-hover');
+      showOverlay(dataMathEl, tex.trim());
+      return;
+    }
+  }
+
   // Check for MathJax v3 elements
   const mjxContainer = e.target.closest('mjx-container');
   if (mjxContainer) {
@@ -292,6 +304,7 @@ document.addEventListener('mouseover', (e) => {
 document.addEventListener('mouseout', (e) => {
   if (currentTarget && 
       !e.relatedTarget?.closest('.katex') && 
+      !e.relatedTarget?.closest('[data-math]') &&
       !e.relatedTarget?.closest('mjx-container') &&
       !e.relatedTarget?.closest('.MathJax_Display, .MJXc-display') && 
       !e.relatedTarget?.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML') &&
@@ -322,6 +335,16 @@ document.addEventListener('click', (e) => {
     const tex = findAnnotationTex(katex);
     if (tex) {
       copyLatex(tex);
+      return;
+    }
+  }
+
+  // Check for math elements with data-math
+  const dataMathEl = e.target.closest('[data-math]');
+  if (dataMathEl) {
+    const tex = dataMathEl.getAttribute('data-math');
+    if (tex && tex.trim()) {
+      copyLatex(tex.trim());
       return;
     }
   }

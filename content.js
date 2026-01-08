@@ -340,3 +340,17 @@ document.addEventListener('click', (e) => {
     }
   }
 });
+
+
+// NEW FEATURE!!!: Selection to Markdown with LaTeX
+
+// Listen for messages from background script
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'convertHtmlToMarkdown') {
+    // console.log('[Copy LaTeX] Converting HTML to Markdown, length:', message.html?.length);
+    convertAndCopyHtml(message.html).then(result => {
+      sendResponse(result);
+    });
+    return true;  // Keep channel open for async response
+  }
+});

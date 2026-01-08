@@ -8,6 +8,8 @@ Version 1.2: Now it also works for MathJax v3 (when there is no LaTeX code in th
 
 Version 1.3: Dark mode enabled and replaced check emoji with SVG icon.
 
+Version 1.4: New feature! Select text (that includes formulas), right click on it and a `Copy as Markdown (with LaTeX)` option will appear.
+
 ## How it works technically
 
 1. **Content Script (`content.js`)**:
@@ -81,9 +83,11 @@ If you have an idea for a new feature open an issue and let me know! Also if you
 
 ## Planned features:
 
-- **Typst support**: 
+- [X] **Text selection to Markdown**: Select some text that includes equations, right click and a new option "[Extension Icon] Copy as Markdown" appears.
+- [ ] **Typst support**: 
   Pop up with a toggle between LaTeX and Typst
-- **Text selection to Markdown**: Select some text that includes equations, right click and a new option "[Extension Icon] Copy to Markdown" appears.
+- [ ] **Custom  delimiters**: 
+Chose between no delimiters (default), `$` and `$$`, `\(` and `\[`, always `$`, or always `$$`.
 
 # Related
 There is also a Chrome version of this extension: [https://github.com/Mapaor/copy-latex-chrome-extension](https://github.com/Mapaor/copy-latex-chrome-extension) 

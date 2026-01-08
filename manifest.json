@@ -39,9 +39,9 @@
       "matches": ["<all_urls>"],
       "js": [
         "content.js",
-        "lib/markdown2html/selection-to-markdown.js",
-        "lib/markdown2html/turndown/turndown.js",
-        "lib/markdown2html/turndown/turndown-plugin-gfm.js"
+        "lib/html2markdown/selection-to-markdown.js",
+        "lib/html2markdown/turndown/turndown.js",
+        "lib/html2markdown/turndown/turndown-plugin-gfm.js"
       ],
       "css": ["overlay.css"],
       "run_at": "document_idle"

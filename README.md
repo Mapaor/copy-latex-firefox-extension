@@ -6,6 +6,8 @@ Version 1.1: Now it also works with with Wikipedia and Wikiwand images.
 
 Version 1.2: Now it also works for MathJax v3 (when there is no LaTeX code in the HTML) via API.
 
+Version 1.3: Dark mode enabled and replaced check emoji with SVG icon.
+
 ## How it works technically
 
 1. **Content Script (`content.js`)**:
@@ -68,6 +70,20 @@ And now the custom site should appear as a new toggle in the "Permissions and da
 - Firefox Add-on page: [https://addons.mozilla.org/en-US/firefox/addon/copy-latex](https://addons.mozilla.org/en-US/firefox/addon/copy-latex)
 - GitHub Repo: [https://github.com/Mapaor/copy-latex-firefox-extension](https://github.com/Mapaor/copy-latex-firefox-extension)
 - README as a website: [https://mapaor.github.io/copy-latex-firefox-extension/](https://mapaor.github.io/copy-latex-firefox-extension/)
+
+## License
+
+MIT License.
+
+It is MIT Licensed so that anyone can customize it to their needs but please don't just copy-cat the code and publish it with a new name, it's weird. 
+
+If you have an idea for a new feature open an issue and let me know! Also if you have the time to implement a feature you want it would be great if you made a pull request.
+
+## Planned features:
+
+- **Typst support**: 
+  Pop up with a toggle between LaTeX and Typst
+- **Text selection to Markdown**: Select some text that includes equations, right click and a new option "[Extension Icon] Copy to Markdown" appears.
 
 # Related
 There is also a Chrome version of this extension: [https://github.com/Mapaor/copy-latex-chrome-extension](https://github.com/Mapaor/copy-latex-chrome-extension) 

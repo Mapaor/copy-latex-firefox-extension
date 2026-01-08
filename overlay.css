@@ -16,7 +16,7 @@
   opacity: 0;
   transform: translateY(-4px);
   transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
-  pointer-events: none; /* no bloqueja clics */
+  pointer-events: none; /* does not prevent clicks */
 }
 
 .hoverlatex-overlay.visible {
@@ -29,9 +29,21 @@
   height: 20px;
 }
 
+.hoverlatex-overlay span {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .hoverlatex-overlay.copied {
   background: #e6ffe6;
   color: #006400;
+}
+
+.hoverlatex-overlay .check-icon {
+  color: #006400;
+  flex-shrink: 0;
 }
 
 .katex.hoverlatex-hover {
@@ -60,4 +72,21 @@ img.mwe-math.hoverlatex-hover,
 img.mwe-math-fallback-image-inline.hoverlatex-hover,
 img.mwe-math-fallback-image-display.hoverlatex-hover {
   cursor: pointer;
+}
+
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .hoverlatex-overlay {
+    background: #1e1e1e;
+    color: #f0f0f0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+  }
+  .hoverlatex-overlay.copied {
+    background: #052e16;
+    color: #dcfce7;
+  }
+  .hoverlatex-overlay .check-icon {
+    color: #dcfce7;
+  }
 }

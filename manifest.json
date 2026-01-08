@@ -40,7 +40,10 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "copy-latex@mapaor"
+      "id": "copy-latex@mapaor",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   }
 }

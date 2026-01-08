@@ -33,7 +33,7 @@
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .hoverlatex-overlay.copied {

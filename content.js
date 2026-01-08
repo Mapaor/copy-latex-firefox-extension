@@ -189,7 +189,7 @@ function createOverlay() {
   overlay = document.createElement('div');
   overlay.className = 'hoverlatex-overlay';
 
-  // Contingut HTML amb SVG i text
+  // HTML overlay content with inline SVG icon and 'Click to copy' text
   overlay.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -228,7 +228,7 @@ function hideOverlay() {
 function copyLatex(tex) {
   navigator.clipboard.writeText(tex).then(() => {
     overlay.classList.add('copied');
-    overlay.querySelector('span').textContent = 'Copied! ✅';
+    overlay.querySelector('span').textContent = 'Copied! ✅'; // todo: replace emoji with inline svg tw icon: https://mapaor.github.io/tw-emojis/tw-emojis-svgs/2705.svg
     setTimeout(() => {
       overlay.classList.remove('copied');
       overlay.querySelector('span').textContent = 'Click to copy';
@@ -339,12 +339,12 @@ document.addEventListener('click', (e) => {
     }
   }
 
-  // Check for math elements with data-math
+  // Check for elements (div or span) with custom attribute `data-math` (for Gemini)
   const dataMathEl = e.target.closest('[data-math]');
   if (dataMathEl) {
     const tex = dataMathEl.getAttribute('data-math');
-    if (tex && tex.trim()) {
-      copyLatex(tex.trim());
+    if (tex) {
+      copyLatex(tex);
       return;
     }
   }

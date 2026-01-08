@@ -42,6 +42,10 @@ mjx-container.hoverlatex-hover {
   cursor: pointer;
 }
 
+[data-math].hoverlatex-hover {
+  cursor: pointer;
+}
+
 .MathJax_Display.hoverlatex-hover,
 .MathJax.hoverlatex-hover,
 .mjx-chtml.hoverlatex-hover,

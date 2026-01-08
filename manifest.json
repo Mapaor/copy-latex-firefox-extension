@@ -4,6 +4,10 @@
   "version": "1.3.0",
   "description": "Hover and click to copy LaTeX expressions on ChatGPT, DeepSeek, Wikipedia, Stack Exchange and other math-related websites.",
   "icons": { "48": "icon48.png" },
+  "permissions": ["contextMenus", "scripting", "activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "host_permissions": [
     "https://chatgpt.com/*",
     "https://chat.deepseek.com/*",
@@ -36,6 +40,12 @@
       "js": ["content.js"],
       "css": ["overlay.css"],
       "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["mathjax-inject.js"],
+      "matches": ["<all_urls>"]
     }
   ],
   "browser_specific_settings": {

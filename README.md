@@ -53,6 +53,9 @@ Version 1.4: New feature! Select text (that includes formulas), right click on i
 #### Wikipedia images
 <img src="assets/gif-demo-wikipedia.gif" alt="Demo-MathJax" width="800">
 
+#### Copy as Markdown
+<img src="assets/gif-demo-copy-as-markdown.gif" alt="Demo-KaTeX" width="800">
+
 ## Popular Sites Using MathJax/KaTeX
 Generally any math, physics, or engineering-related blog or website. Some typical examples:
 - KaTeX: ChatGPT, DeepSeek, Notion...

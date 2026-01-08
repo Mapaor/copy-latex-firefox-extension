@@ -1,7 +1,7 @@
 // Inject page script for MathJax v3 extraction
 async function injectMathJaxPageScript() {
   try {
-    const scriptUrl = browser.runtime.getURL('mathjax-inject.js');
+    const scriptUrl = browser.runtime.getURL('mathjax-api.js');
     const response = await fetch(scriptUrl);
     const scriptText = await response.text();
     
@@ -9,7 +9,7 @@ async function injectMathJaxPageScript() {
     script.textContent = scriptText;
     document.documentElement.appendChild(script);
   } catch (error) {
-    console.error('[HoverLatex] Failed to inject MathJax page script:', error);
+    console.error('[HoverLatex] Failed to inject MathJax script:', error);
   }
 }
 

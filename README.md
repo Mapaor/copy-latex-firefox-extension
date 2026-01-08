@@ -20,8 +20,8 @@ Version 1.4: New feature! Select text (that includes formulas), right click on i
      - Extracts LaTeX inside `data-math` attribute.
    - **For MathJax**
      - Extracts LaTeX inside `<script type="math/tex">` elements.
-   - **For MathJax v3**
-      - Injects page script to extract LaTeX from `mjx-container` elements via MathJax's API. Only possible via API and inject script, no LaTeX code present in the generated HTML.
+   - **For MathJax v3/v4**
+      - Injects page script (`mathjax-api.js`) to extract LaTeX from `mjx-container` elements via MathJax's API. Only possible via API and inject script because no LaTeX code present in the generated HTML.
    - **For Wikipedia**
      - Extracts LaTeX from `alt` attributes of images.
    - **For all of them** 
@@ -36,7 +36,12 @@ Version 1.4: New feature! Select text (that includes formulas), right click on i
    - `pointer` cursor.
 
 3. **Extension declaration `manifest.json`**:
-   - Injects `content.js` and `overlay.css`.
+   - Injects `content.js`, `overlay.css` and the other scripts.
+   - Sets information and permissions of the extension.
+4. **Background script `background.js`**:
+   - Handles context menu (right click). Needed to display the "Copy as Markdown" option when right clicking the selected text.
+5. **Selection script `selection-to-markdown.js`**:
+   - A set of functions, workers and utilities to convert HTML to markdown while preserving our extracted LaTeX. Under the hood uses the `turndown.js` library and the `turndown-plugin-gfm.js` GitHub-flavored markdown plugin for converting HTML to Markdown.
 
 ## Example GIFs
 #### KaTeX

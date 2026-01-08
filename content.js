@@ -189,7 +189,7 @@ function createOverlay() {
   overlay = document.createElement('div');
   overlay.className = 'hoverlatex-overlay';
 
-  // Contingut HTML amb SVG i text
+  // HTML overlay content with inline SVG icon and 'Click to copy' text
   overlay.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -228,7 +228,7 @@ function hideOverlay() {
 function copyLatex(tex) {
   navigator.clipboard.writeText(tex).then(() => {
     overlay.classList.add('copied');
-    overlay.querySelector('span').textContent = 'Copied! ✅';
+    overlay.querySelector('span').textContent = 'Copied! ✅'; // todo: replace emoji with inline svg tw icon: https://mapaor.github.io/tw-emojis/tw-emojis-svgs/2705.svg
     setTimeout(() => {
       overlay.classList.remove('copied');
       overlay.querySelector('span').textContent = 'Click to copy';
@@ -258,6 +258,18 @@ document.addEventListener('mouseover', (e) => {
       currentTarget = katex;
       katex.classList.add('hoverlatex-hover');
       showOverlay(katex, tex);
+      return;
+    }
+  }
+
+  // Check for math elements with data-math
+  const dataMathEl = e.target.closest('[data-math]');
+  if (dataMathEl) {
+    const tex = dataMathEl.getAttribute('data-math');
+    if (tex && tex.trim()) {
+      currentTarget = dataMathEl;
+      dataMathEl.classList.add('hoverlatex-hover');
+      showOverlay(dataMathEl, tex.trim());
       return;
     }
   }
@@ -292,6 +304,7 @@ document.addEventListener('mouseover', (e) => {
 document.addEventListener('mouseout', (e) => {
   if (currentTarget && 
       !e.relatedTarget?.closest('.katex') && 
+      !e.relatedTarget?.closest('[data-math]') &&
       !e.relatedTarget?.closest('mjx-container') &&
       !e.relatedTarget?.closest('.MathJax_Display, .MJXc-display') && 
       !e.relatedTarget?.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML') &&
@@ -320,6 +333,16 @@ document.addEventListener('click', (e) => {
   const katex = e.target.closest('.katex');
   if (katex) {
     const tex = findAnnotationTex(katex);
+    if (tex) {
+      copyLatex(tex);
+      return;
+    }
+  }
+
+  // Check for elements (div or span) with custom attribute `data-math` (for Gemini)
+  const dataMathEl = e.target.closest('[data-math]');
+  if (dataMathEl) {
+    const tex = dataMathEl.getAttribute('data-math');
     if (tex) {
       copyLatex(tex);
       return;

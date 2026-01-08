@@ -7,13 +7,13 @@ browser.runtime.onInstalled.addListener(() => {
     title: 'Copy as Markdown (with LaTeX)',
     contexts: ['selection']
   });
-  console.log('[HoverLatex] Context menu created');
+  // console.log('[Copy LaTeX] Context menu created');
 });
 
 // Handle context menu clicks
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === 'copy-selection-as-markdown' && tab?.id) {
-    console.log('[HoverLatex] Context menu clicked, tab ID:', tab.id);
+    // console.log('[Copy LaTeX] Context menu clicked, tab ID:', tab.id);
 
     try {
       // Execute script to get the selection HTML
@@ -32,20 +32,20 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
           }
 
           const html = container.innerHTML;
-          console.log('[HoverLatex] Selection HTML:', html.substring(0, 200));
+          // console.log('[Copy LaTeX] Selection HTML:', html.substring(0, 200));
 
           // Return HTML to background script
           return { ok: true, html, text: selection.toString() };
         }
       });
 
-      console.log('[HoverLatex] executeScript result:', results);
+      // console.log('[Copy LaTeX] executeScript result:', results);
 
       if (results && results[0] && results[0].result) {
         const result = results[0].result;
 
         if (result.ok && result.html) {
-          console.log('[HoverLatex] Got selection HTML, length:', result.html.length);
+          // console.log('[Copy LaTeX] Got selection HTML, length:', result.html.length);
 
           // Send message to content script to convert HTML to Markdown
           const response = await browser.tabs.sendMessage(tab.id, {
@@ -53,20 +53,20 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
             html: result.html
           });
 
-          console.log('[HoverLatex] Markdown conversion response:', response);
+          // console.log('[Copy LaTeX] Markdown conversion response:', response);
 
           if (response && response.ok) {
-            console.log('[HoverLatex] Copy successful');
+            console.log('[Copy LaTeX] Copy successful');
           } else {
-            console.error('[HoverLatex] Copy failed:', response?.error);
+            console.error('[Copy LaTeX] Copy failed:', response?.error);
           }
         } else {
-          console.error('[HoverLatex] No selection or error:', result.error);
+          console.error('[Copy LaTeX] No selection or error:', result.error);
         }
       }
     } catch (error) {
-      console.error('[HoverLatex] Error:', error);
-      console.error('[HoverLatex] Error details:', JSON.stringify(error, null, 2));
+      console.error('[Copy LaTeX] Error:', error);
+      console.error('[Copy LaTeX] Error details:', JSON.stringify(error, null, 2));
     }
   }
 });

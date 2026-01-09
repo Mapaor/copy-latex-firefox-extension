@@ -10,6 +10,38 @@ Version 1.3: Dark mode enabled and replaced check emoji with SVG icon.
 
 Version 1.4: New feature! Select text (that includes formulas), right click on it and a `Copy as Markdown (with LaTeX)` option will appear.
 
+## Example GIFs
+#### KaTeX
+<img src="assets/gif-demo-katex.gif" alt="Demo-KaTeX" width="800">
+
+#### MathJax
+<img src="assets/gif-demo-mathjax.gif" alt="Demo-MathJax" width="800">
+
+#### Wikipedia images
+<img src="assets/gif-demo-wikipedia.gif" alt="Demo-MathJax" width="800">
+
+#### Copy as Markdown
+<img src="assets/gif-demo-copy-as-markdown.gif" alt="Demo-KaTeX" width="800">
+
+## Popular Sites Using MathJax/KaTeX
+Generally any math, physics, or engineering-related blog or website. Some typical examples:
+- KaTeX: ChatGPT, DeepSeek, Notion, Gemini...
+- MathJax: Stack Exchange, ProofWiki...
+
+## Host permissions and speed
+You can check the javascript source code yourself. It loads after everything and is very fast and small sized. However if you want you can always customize in which hosts (websites) the extension loads or not:
+
+<img src="assets/toggle-firefox.jpg" alt="Manage-extension-permissions" width="800">
+
+This is done in "Firefox Settings > Extensions & Themes" (or simply search `about:addons`), clicking the extension and choosing the tab "Permissions and Data".
+
+In case you turn off the "all sites" toggle option, you can also add manual sites that are not in the default list.
+
+<img src="assets/manual-specific-site.jpg" alt="Manage-extension-permissions" width="800">
+
+And now the custom site should appear as a new toggle in the "Permissions and data" tab.
+
+
 ## How it works technically
 
 1. **Content Script (`content.js`)**:
@@ -43,43 +75,20 @@ Version 1.4: New feature! Select text (that includes formulas), right click on i
 5. **Selection script `selection-to-markdown.js`**:
    - A set of functions, workers and utilities to convert HTML to markdown while preserving our extracted LaTeX. Under the hood uses the `turndown.js` library and the `turndown-plugin-gfm.js` GitHub-flavored markdown plugin for converting HTML to Markdown.
 
-## Example GIFs
-#### KaTeX
-<img src="assets/gif-demo-katex.gif" alt="Demo-KaTeX" width="800">
+### How to test the extension locally
 
-#### MathJax
-<img src="assets/gif-demo-mathjax.gif" alt="Demo-MathJax" width="800">
-
-#### Wikipedia images
-<img src="assets/gif-demo-wikipedia.gif" alt="Demo-MathJax" width="800">
-
-#### Copy as Markdown
-<img src="assets/gif-demo-copy-as-markdown.gif" alt="Demo-KaTeX" width="800">
-
-## Popular Sites Using MathJax/KaTeX
-Generally any math, physics, or engineering-related blog or website. Some typical examples:
-- KaTeX: ChatGPT, DeepSeek, Notion...
-- MathJax: Stack Exchange, ProofWiki...
-
-## Host premissions and speed
-The javascript source code is extremely simple and available [here](https://github.com/Mapaor/copy-latex-firefox-extension/blob/main/content.js). It loads after everything and is blazingly fast.
-
-However you can always customize in which hosts (websites) the extension loads or not:
-
-<img src="assets/toggle-firefox.jpg" alt="Manage-extension-permissions" width="800">
-
-This is done in "Firefox Settings > Extensions & Themes" (or simply search `about:addons`), clicking the extension and choosing the tab "Premissions and Data".
-
-In case you turn off the "all sites" toggle option, you can also add manual sites that are not in the default list.
-
-<img src="assets/manual-specific-site.jpg" alt="Manage-extension-permissions" width="800">
-
-And now the custom site should appear as a new toggle in the "Permissions and data" tab.
+1. Create a zip that contains all the files inside the `src` directory (without containing the src folder itself).
+2. Then go to `about:debugging` (as if it were an URL) and in the 'This Firefox' tab select the button 'Load a Temporary Add-On...' and input the zip file.
 
 ## Links
 - Firefox Add-on page: [https://addons.mozilla.org/en-US/firefox/addon/copy-latex](https://addons.mozilla.org/en-US/firefox/addon/copy-latex)
 - GitHub Repo: [https://github.com/Mapaor/copy-latex-firefox-extension](https://github.com/Mapaor/copy-latex-firefox-extension)
 - README as a website: [https://mapaor.github.io/copy-latex-firefox-extension/](https://mapaor.github.io/copy-latex-firefox-extension/)
+
+## Chrome version
+There is also a Chrome version of this extension: [https://github.com/Mapaor/copy-latex-chrome-extension](https://github.com/Mapaor/copy-latex-chrome-extension) 
+
+TODO: Update chrome version and generate it as a fork of this one.
 
 ## License
 
@@ -96,6 +105,3 @@ If you have an idea for a new feature open an issue and let me know! Also if you
   Pop up with a toggle between LaTeX and Typst
 - [ ] **Custom  delimiters**: 
 Chose between no delimiters (default), `$` and `$$`, `\(` and `\[`, always `$`, or always `$$`.
-
-# Related
-There is also a Chrome version of this extension: [https://github.com/Mapaor/copy-latex-chrome-extension](https://github.com/Mapaor/copy-latex-chrome-extension) 

@@ -99,8 +99,6 @@ And now the custom site should appear as a new toggle in the "Permissions and da
 ## Chrome version
 There is also a Chrome version of this extension: [https://github.com/Mapaor/copy-latex-chrome-extension](https://github.com/Mapaor/old-copy-latex-chrome-extension) 
 
-TODO: Update chrome version and generate it as a fork of this one (pending).
-
 ## Acknowledgements
 
 Credits to @leander-ow for his dark mode contribution and to  @ashigirl96 for suggesting and providing a working code implementation for the "Copy as Markdown" feature. 

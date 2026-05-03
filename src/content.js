@@ -184,9 +184,44 @@ function findMathJaxTex(el) {
 function createOverlay() {
   overlay = document.createElement('div');
   overlay.className = 'hoverlatex-overlay';
+  // console.log('[Copy LaTeX] Overlay created. Initial class:', overlay.className);
 
   // Set theme class based on user preference
-  setOverlayThemeClass();
+  setOverlayThemeClass().then(() => {
+    console.log('[Copy LaTeX] Overlay after theme set. Classes:', overlay.className);
+    const bg = window.getComputedStyle(overlay).backgroundColor;
+    console.log('[Copy LaTeX] Overlay computed background after theme set:', bg);
+  });
+
+  // MutationObserver to log class/style changes (I'll remove it later)
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'attributes' && (mutation.attributeName === 'class' || mutation.attributeName === 'style')) {
+        console.log('[Copy LaTeX][MutationObserver] Overlay attribute changed:', mutation.attributeName, {
+          class: overlay.className,
+          style: overlay.getAttribute('style'),
+          computedBg: window.getComputedStyle(overlay).backgroundColor
+        });
+      }
+    }
+  });
+  observer.observe(overlay, { attributes: true, attributeFilter: ['class', 'style'] });
+
+  // Random interval observer: logs computed background color at random intervals (10-100ms)
+  let lastBg = '';
+  function randomBgLogger() {
+    if (overlay) {
+      const bg = window.getComputedStyle(overlay).backgroundColor;
+      if (bg !== lastBg) {
+        console.log('[Copy LaTeX][RandomBgObserver] Overlay computed background:', bg);
+        lastBg = bg;
+      }
+    }
+    // Schedule next check at a random interval between 10ms and 100ms
+    const nextDelay = Math.floor(Math.random() * 91) + 10;
+    setTimeout(randomBgLogger, nextDelay);
+  }
+  randomBgLogger();
 
   // HTML overlay content with inline SVG icon and 'Click to copy' text
   overlay.appendChild(createSvgFromString(copy_svg));
@@ -204,30 +239,48 @@ async function setOverlayThemeClass() {
   let theme = 'system';
   try {
     const result = await browser.storage.local.get('themeMode');
+    // console.log('[Copy LaTeX] setOverlayThemeClass: browser.storage.local themeMode =', result.themeMode);
     theme = result.themeMode || 'system';
-  } catch {}
+  } catch (e) {
+    // This can happen during navigation/refresh or extension reload: the content-script
+    // context is torn down while an async storage call is in-flight.
+    const message = (e && typeof e === 'object' && 'message' in e) ? String(e.message) : String(e);
+    if (!message.includes('Extension context invalidated')) {
+      console.warn('[Copy LaTeX] setOverlayThemeClass: error reading browser.storage.local', e);
+    }
+  }
+  // console.log('[Copy LaTeX] setOverlayThemeClass: using theme =', theme);
   if (theme === 'light') {
     overlay.classList.add('theme-light');
   } else if (theme === 'dark') {
     overlay.classList.add('theme-dark');
   }
-  // If system, do not add any theme class (prefers-color-scheme CSS will apply)
+  // If system, do not add any theme class (prefers-color-scheme CSS media query will apply)
 }
 
 function showOverlay(target, tex) {
-  if (!overlay) createOverlay();
-  setOverlayThemeClass();
-
-  overlay.dataset.tex = tex;
-  const rect = target.getBoundingClientRect();
-  const overlayWidth = overlay.offsetWidth;
-  const top = rect.top + window.scrollY - overlay.offsetHeight - 8;
-  const left = rect.left + window.scrollX + (rect.width / 2) - (overlayWidth / 2);
-
-  overlay.style.top = `${top}px`;
-  overlay.style.left = `${left}px`;
-
-  overlay.classList.add('visible');
+  if (!overlay) {
+    // console.log('[Copy LaTeX] showOverlay: overlay does not exist, creating...');
+    createOverlay();
+  } else {
+    // console.log('[Copy LaTeX] showOverlay: overlay exists, reusing. Classes:', overlay.className);
+  }
+  // Only make overlay visible after theme is set
+  setOverlayThemeClass().then(() => {
+    // Remove .visible if present before theme is set
+    overlay.classList.remove('visible');
+    // console.log('[Copy LaTeX] showOverlay: after theme set. Classes:', overlay.className);
+    const bg = window.getComputedStyle(overlay).backgroundColor;
+    // console.log('[Copy LaTeX] showOverlay: computed background:', bg);
+    overlay.dataset.tex = tex;
+    const rect = target.getBoundingClientRect();
+    const overlayWidth = overlay.offsetWidth;
+    const top = rect.top + window.scrollY - overlay.offsetHeight - 8;
+    const left = rect.left + window.scrollX + (rect.width / 2) - (overlayWidth / 2);
+    overlay.style.top = `${top}px`;
+    overlay.style.left = `${left}px`;
+    overlay.classList.add('visible');
+  });
 }
 
 function hideOverlay() {
@@ -391,6 +444,7 @@ function handleCopyGesture(e, source) {
   if (isWikipedia()) {
     const wikipediaTex = findWikipediaTex(e.target);
     if (wikipediaTex) {
+      // console.log('[Copy LaTeX] Clicked Wikipedia math image:', e.target, 'TeX:', wikipediaTex);
       copyLatex(wikipediaTex);
       return;
     }
@@ -416,6 +470,7 @@ function handleCopyGesture(e, source) {
   if (dataMathEl) {
     const tex = dataMathEl.getAttribute('data-math');
     if (tex) {
+      // console.log('[Copy LaTeX] Clicked data-math element:', dataMathEl, 'TeX:', tex);
       copyLatex(tex);
       return;
     }
@@ -426,6 +481,7 @@ function handleCopyGesture(e, source) {
   if (mjxContainer) {
     const tex = findMathJaxV3Tex(mjxContainer);
     if (tex) {
+      // console.log('[Copy LaTeX] Clicked MathJax v3 element:', mjxContainer, 'TeX:', tex);
       copyLatex(tex);
       return;
     }
@@ -438,6 +494,7 @@ function handleCopyGesture(e, source) {
     const mathElement = mathJaxDisplay || mathJaxInline;
     const tex = findMathJaxTex(mathElement);
     if (tex) {
+      // console.log('[Copy LaTeX] Clicked MathJax element:', mathElement, 'TeX:', tex);
       copyLatex(tex);
     }
   }
@@ -451,43 +508,40 @@ document.addEventListener('click', (e) => handleCopyGesture(e, 'click(capture)')
 // NOW ALSO WITH TYPST SUPPORT ("Copy as Typst")
 
 // Listen for messages from background script
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'convertHtmlToMarkdown') {
+browser.runtime.onMessage.addListener((message) => {
+  if (message?.type !== 'convertHtmlToMarkdown') return;
+
+  return (async () => {
     // console.log('[Copy LaTeX] Converting HTML to Markdown, length:', message.html?.length);
-    convertAndCopyHtml(message.html).then(async result => {
-      if (result.ok) {
-        // Check user's format preference
-        const storageResult = await browser.storage.local.get('outputFormat');
-        const format = storageResult.outputFormat || 'latex';
-        
-        // If Typst mode, convert markdown to typst
-        if (format === 'typst') {
-          try {
-            if (!window.markdown2typst) {
-              console.error('[Copy LaTeX] markdown2typst library not loaded');
-              sendResponse({ ok: false, error: 'markdown2typst library not loaded' });
-              return;
-            }
-            
-            // Get the markdown from clipboard (we just copied it)
-            const markdown = await navigator.clipboard.readText();
-            const typst = window.markdown2typst(markdown);
-            
-            // Copy typst back to clipboard
-            await navigator.clipboard.writeText(typst);
-            console.log('[Copy LaTeX] Converted to Typst and copied');
-            sendResponse({ ok: true, format: 'typst' });
-          } catch (error) {
-            console.error('[Copy LaTeX] Typst conversion error:', error);
-            sendResponse({ ok: false, error: String(error) });
-          }
-        } else {
-          sendResponse(result);
-        }
-      } else {
-        sendResponse(result);
-      }
-    });
-    return true;  // Keep channel open for async response
-  }
+    const result = await convertAndCopyHtml(message.html);
+    if (!result.ok) return result;
+
+    // Check user's format preference
+    const { outputFormat = 'latex' } = await browser.storage.local.get('outputFormat');
+    
+    // If LaTeX mode (not Typst mode), simply return the Markdown result without conversion
+    if (outputFormat !== 'typst') return result;
+
+    // If markdown2typst library not detected, return an error
+    if (!window.markdown2typst) {
+      console.error('[Copy LaTeX] markdown2typst library not loaded');
+      return { ok: false, error: 'markdown2typst library not loaded' };
+    }
+
+    try {
+      // Get the markdown from clipboard (we just copied it)
+      const markdown = await navigator.clipboard.readText();
+      const typst = window.markdown2typst(markdown);
+
+      // Copy typst back to clipboard
+      await navigator.clipboard.writeText(typst);
+      // console.log('[Copy LaTeX] Converted to Typst and copied');
+      
+      return { ok: true, format: 'typst' };
+    
+    } catch (error) {
+      console.error('[Copy LaTeX] Typst conversion error:', error);
+      return { ok: false, error: String(error) };
+    }
+  });
 });

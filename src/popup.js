@@ -1,36 +1,38 @@
 // Load and display current format preference and context menu option
 document.addEventListener('DOMContentLoaded', async () => {
-      // Theme application logic
-      function applyTheme(theme) {
-        document.body.classList.remove('theme-light', 'theme-dark', 'theme-system');
-        if (theme === 'light') {
-          document.body.classList.add('theme-light');
-        } else if (theme === 'dark') {
-          document.body.classList.add('theme-dark');
-        } else {
-          document.body.classList.add('theme-system');
-        }
-      }
-    // Theme radio buttons logic
-    const themeRadios = document.querySelectorAll('input[name="themeMode"]');
-    const themeResult = await browser.storage.local.get('themeMode');
-    const themeMode = themeResult.themeMode || 'system';
-    for (const radio of themeRadios) {
-      radio.checked = radio.value === themeMode;
-      radio.addEventListener('change', async (e) => {
-        if (e.target.checked) {
-          await browser.storage.local.set({ themeMode: e.target.value });
-          applyTheme(e.target.value);
-        }
-      });
+  // Theme application logic
+  function applyTheme(theme) {
+    document.body.classList.remove('theme-light', 'theme-dark', 'theme-system');
+    if (theme === 'light') {
+      document.body.classList.add('theme-light');
+    } else if (theme === 'dark') {
+      document.body.classList.add('theme-dark');
+    } else {
+      document.body.classList.add('theme-system');
     }
-    applyTheme(themeMode);
+  }
+
+  // Theme radio buttons logic
+  const themeRadios = document.querySelectorAll('input[name="themeMode"]');
+  const themeResult = await browser.storage.local.get('themeMode');
+  const themeMode = themeResult.themeMode || 'system';
+  for (const radio of themeRadios) {
+    radio.checked = radio.value === themeMode;
+    radio.addEventListener('change', async (e) => {
+      if (e.target.checked) {
+        await browser.storage.local.set({ themeMode: e.target.value });
+        applyTheme(e.target.value);
+      }
+    });
+  }
+  applyTheme(themeMode);
+
   // Format toggle logic
   const toggle = document.getElementById('formatToggle');
   const result = await browser.storage.local.get('outputFormat');
   const isTypst = result.outputFormat === 'typst';
   toggle.checked = isTypst;
-  
+
   // Save preference on change
   toggle.addEventListener('change', async (e) => {
     const format = e.target.checked ? 'typst' : 'latex';
@@ -43,11 +45,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   let panelOpen = false;
   const body = document.body;
 
-
   function restorePopupHeight() {
     body.classList.remove('expanded');
   }
-
 
   configBtn.addEventListener('click', (e) => {
     panelOpen = !panelOpen;

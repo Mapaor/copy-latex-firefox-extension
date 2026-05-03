@@ -1,4 +1,3 @@
-
 // Convert HTML to Markdown and copy to clipboard (main function)
 async function convertAndCopyHtml(html) {
   try {
@@ -284,6 +283,7 @@ async function copyToClipboard(text) {
       // Continue to fallback
     } else {
       const err = error;
+      console.error('[Copy LaTeX] Clipboard error (navigator_api):', err);
       return { ok: false, error: `${err.name} ${err.message}`, method: 'navigator_api' };
     }
   }
@@ -294,6 +294,7 @@ async function copyToClipboard(text) {
     return { ok: true, method: 'textarea' };
   } catch (error) {
     const err = error;
+    console.error('[Copy LaTeX] Clipboard error (textarea):', err);
     return { ok: false, error: `${err.name} ${err.message}`, method: 'textarea' };
   }
 }

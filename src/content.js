@@ -115,11 +115,11 @@ function findAnnotationTex(el) {
 function findKaTeXElementFromEventTarget(target) {
   if (!(target instanceof Element)) return null;
 
-  // Most sites: event target is inside .katex
+  // In almost all katex sites event target is inside a .katex span tag
+  // Which normally contains two children: katex-html (where the event target is) and katex-mathml (where the TeX expression is stored).
   const closest = target.closest?.('.katex');
   if (closest) return closest;
 
-  // Some sites (e.g., DeepSeek) wrap/overlay the formula; the hovered node may contain .katex
   const directDescendant = target.querySelector?.('.katex');
   if (directDescendant) return directDescendant;
 

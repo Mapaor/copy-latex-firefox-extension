@@ -17,7 +17,8 @@
   },
   "host_permissions": [
     "https://chatgpt.com/*",
-    "https://chat.deepseek.com/*",
+    "https://deepseek.com/*",
+    "https://*.deepseek.com/*",
     "https://math.stackexchange.com/*",
     "https://physics.stackexchange.com/*",
     "https://proofwiki.org/*",

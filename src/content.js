@@ -96,7 +96,9 @@ function findAnnotationTex(el) {
   const katexEl = el.closest('.katex');
   if (!katexEl) return null;
 
-  const ann = katexEl.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+  const ann = katexEl.querySelector(
+    'annotation[encoding="application/x-tex"], annotation[encoding="application/x-latex"], annotation[encoding="application/tex"]'
+  );
   if (ann && ann.textContent.trim()) {
     return ann.textContent.trim();
   }
@@ -106,6 +108,29 @@ function findAnnotationTex(el) {
     katexEl.getAttribute('data-latex') ||
     katexEl.getAttribute('aria-label');
   if (dataLatex && dataLatex.trim()) return dataLatex.trim();
+
+  return null;
+}
+
+function findKaTeXElementFromEventTarget(target) {
+  if (!(target instanceof Element)) return null;
+
+  // Most sites: event target is inside .katex
+  const closest = target.closest?.('.katex');
+  if (closest) return closest;
+
+  // Some sites (e.g., DeepSeek) wrap/overlay the formula; the hovered node may contain .katex
+  const directDescendant = target.querySelector?.('.katex');
+  if (directDescendant) return directDescendant;
+
+  // Try a few ancestors and look for a descendant .katex
+  let node = target;
+  for (let i = 0; i < 4; i++) {
+    node = node.parentElement;
+    if (!node) break;
+    const descendant = node.querySelector?.('.katex');
+    if (descendant) return descendant;
+  }
 
   return null;
 }
@@ -229,6 +254,8 @@ function latexToTypst(latex) {
 // Copy LaTeX or Typst code based on user preference
 async function copyLatex(tex) {
   try {
+    if (!overlay) createOverlay();
+
     // Get user's format preference
     const result = await browser.storage.local.get('outputFormat');
     const format = result.outputFormat || 'latex';
@@ -266,7 +293,7 @@ document.addEventListener('mouseover', (e) => {
   }
 
   // Check for KaTeX elements
-  const katex = e.target.closest('.katex');
+  const katex = findKaTeXElementFromEventTarget(e.target);
   if (katex) {
     const tex = findAnnotationTex(katex);
     if (tex) {
@@ -317,8 +344,12 @@ document.addEventListener('mouseover', (e) => {
 });
 
 document.addEventListener('mouseout', (e) => {
-  if (currentTarget && 
-      !e.relatedTarget?.closest('.katex') && 
+  if (currentTarget &&
+      // Don't hide if we're still moving within the current target
+      (e.relatedTarget instanceof Node && currentTarget.contains(e.relatedTarget)) === false &&
+      // Don't hide if moving into our overlay
+      !e.relatedTarget?.closest('.hoverlatex-overlay') &&
+      !findKaTeXElementFromEventTarget(e.relatedTarget) &&
       !e.relatedTarget?.closest('[data-math]') &&
       !e.relatedTarget?.closest('mjx-container') &&
       !e.relatedTarget?.closest('.MathJax_Display, .MJXc-display') && 
@@ -334,7 +365,28 @@ document.addEventListener('mouseout', (e) => {
   }
 });
 
-document.addEventListener('click', (e) => {
+let lastCopyGestureTs = 0;
+let lastCopiedTex = null;
+
+function shouldHandleGesture(e) {
+  // Only handle left-click style gestures for mouse.
+  // For touch/pen, button is often 0 or undefined.
+  if (typeof e.button === 'number' && e.button !== 0) return false;
+  return true;
+}
+
+function handleCopyGesture(e, source) {
+  if (!shouldHandleGesture(e)) return;
+
+  // Allow clicking the extension's own overlay
+  if (overlay && overlay.classList.contains('visible') && e.target?.closest('.hoverlatex-overlay')) {
+    const tex = overlay.dataset.tex;
+    if (tex && tex.trim()) {
+      copyLatex(tex.trim());
+    }
+    return;
+  }
+
   // Check for Wikipedia math images first (only on Wikipedia/Wikiwand sites)
   if (isWikipedia()) {
     const wikipediaTex = findWikipediaTex(e.target);
@@ -345,17 +397,22 @@ document.addEventListener('click', (e) => {
   }
 
   // Check for KaTeX elements
-  const katex = e.target.closest('.katex');
+  const katex = findKaTeXElementFromEventTarget(e.target);
   if (katex) {
     const tex = findAnnotationTex(katex);
     if (tex) {
+      const now = Date.now();
+      // Dedupe: pointerdown often followed by click
+      if (lastCopiedTex === tex && (now - lastCopyGestureTs) < 700) return;
+      lastCopyGestureTs = now;
+      lastCopiedTex = tex;
       copyLatex(tex);
       return;
     }
   }
 
   // Check for elements (div or span) with custom attribute `data-math` (for Gemini)
-  const dataMathEl = e.target.closest('[data-math]');
+  const dataMathEl = e.target.closest?.('[data-math]');
   if (dataMathEl) {
     const tex = dataMathEl.getAttribute('data-math');
     if (tex) {
@@ -365,7 +422,7 @@ document.addEventListener('click', (e) => {
   }
 
   // Check for MathJax v3 elements
-  const mjxContainer = e.target.closest('mjx-container');
+  const mjxContainer = e.target.closest?.('mjx-container');
   if (mjxContainer) {
     const tex = findMathJaxV3Tex(mjxContainer);
     if (tex) {
@@ -375,9 +432,8 @@ document.addEventListener('click', (e) => {
   }
 
   // Check for MathJax elements
-  const mathJaxDisplay = e.target.closest('.MathJax_Display, .MJXc-display');
-  const mathJaxInline = e.target.closest('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML');
-  
+  const mathJaxDisplay = e.target.closest?.('.MathJax_Display, .MJXc-display');
+  const mathJaxInline = e.target.closest?.('.MathJax, .mjx-chtml, .MathJax_CHTML, .MathJax_MathML');
   if (mathJaxDisplay || mathJaxInline) {
     const mathElement = mathJaxDisplay || mathJaxInline;
     const tex = findMathJaxTex(mathElement);
@@ -385,7 +441,10 @@ document.addEventListener('click', (e) => {
       copyLatex(tex);
     }
   }
-});
+}
+
+document.addEventListener('pointerdown', (e) => handleCopyGesture(e, 'pointerdown(capture)'), { capture: true });
+document.addEventListener('click', (e) => handleCopyGesture(e, 'click(capture)'), { capture: true });
 
 
 // NEW FEATURE!!!: Selection to Markdown with LaTeX

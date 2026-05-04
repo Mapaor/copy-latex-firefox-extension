@@ -21,10 +21,12 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 16 16" stroke="var(--icon-stroke)"><title>config</title><path fill="none" stroke="var(--icon-stroke)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.711" d="M7.997 9.694a1.726 1.695 0 1 0 0-3.39a1.726 1.695 0 0 0 0 3.39m3.021-6.78l3.021 5.085l-3.021 5.085H4.976L1.955 7.999l3.021-5.085z"/></svg>
     </button>
     <div id="settingsPanel" class="settings-panel" style="display:none;">
+      <h4>Context Menu</h4>
       <label class="settings-checkbox">
         <input type="checkbox" id="contextMenuOption">
         Show context menu option
       </label>
+      <h4>Theme</h4>
       <div class="theme-radio-group">
         <label class="theme-radio">
           <input type="radio" name="themeMode" value="light">
@@ -38,6 +40,61 @@
           <input type="radio" name="themeMode" value="system">
           System
         </label>
+      </div>
+      <h4>Custom Delimiters</h4>
+      <div class="delimiter-columns-container">
+        <div class="delimiter-column">
+          <h5 id="inlineDelimitersHeader" class="collapsible-header">Inline</h5>
+          <div id="inlineDelimitersContent" class="delimiter-content">
+            <label class="delimiter-radio">
+              <input type="radio" name="inlineDelimiter" value="none" checked>
+              None (default)
+            </label>
+            <label class="delimiter-radio">
+              <input type="radio" name="inlineDelimiter" value="dollar">
+              $
+            </label>
+            <label class="delimiter-radio">
+              <input type="radio" name="inlineDelimiter" value="paren">
+              \( and \)
+            </label>
+            <label class="delimiter-radio">
+              <input type="radio" name="inlineDelimiter" value="custom">
+              Custom
+            </label>
+            <div id="inlineCustomInput" class="custom-input-group" disabled>
+              <label>Start: <input type="text" id="inlineStart" disabled></label>
+              <label>End: <input type="text" id="inlineEnd" disabled></label>
+              <button id="inlineSave" disabled>Save</button>
+            </div>
+          </div>
+        </div>
+        <div class="delimiter-column">
+          <h5 id="displayDelimitersHeader" class="collapsible-header">Display</h5>
+          <div id="displayDelimitersContent" class="delimiter-content">
+            <label class="delimiter-radio">
+              <input type="radio" name="displayDelimiter" value="none" checked>
+              None (default)
+            </label>
+            <label class="delimiter-radio">
+              <input type="radio" name="displayDelimiter" value="dollar">
+              $$
+            </label>
+            <label class="delimiter-radio">
+              <input type="radio" name="displayDelimiter" value="bracket">
+              \[ and \]
+            </label>
+            <label class="delimiter-radio">
+              <input type="radio" name="displayDelimiter" value="custom">
+              Custom
+            </label>
+            <div id="displayCustomInput" class="custom-input-group" disabled>
+              <label>Start: <input type="text" id="displayStart" disabled></label>
+              <label>End: <input type="text" id="displayEnd" disabled></label>
+              <button id="displaySave" disabled>Save</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

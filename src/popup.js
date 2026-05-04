@@ -77,4 +77,74 @@ document.addEventListener('DOMContentLoaded', async () => {
   contextMenuOptionCheckbox.addEventListener('change', async () => {
     await browser.storage.local.set({ showContextMenu: contextMenuOptionCheckbox.checked });
   });
+
+  // Inline delimiters toggle logic
+  const inlineDelimitersHeader = document.getElementById('inlineDelimitersHeader');
+  const inlineDelimitersContent = document.getElementById('inlineDelimitersContent');
+
+  inlineDelimitersHeader.addEventListener('click', () => {
+    inlineDelimitersHeader.classList.toggle('expanded');
+    inlineDelimitersContent.classList.toggle('expanded');
+  });
+
+  // Display delimiters toggle logic
+  const displayDelimitersHeader = document.getElementById('displayDelimitersHeader');
+  const displayDelimitersContent = document.getElementById('displayDelimitersContent');
+
+  displayDelimitersHeader.addEventListener('click', () => {
+    displayDelimitersHeader.classList.toggle('expanded');
+    displayDelimitersContent.classList.toggle('expanded');
+  });
+
+  // Inline custom delimiter inputs
+  const inlineRadios = document.querySelectorAll('input[name="inlineDelimiter"]');
+  const inlineCustomInput = document.getElementById('inlineCustomInput');
+  const inlineStart = document.getElementById('inlineStart');
+  const inlineEnd = document.getElementById('inlineEnd');
+  const inlineSave = document.getElementById('inlineSave');
+
+  function updateInlineCustomState() {
+    const isCustom = document.querySelector('input[name="inlineDelimiter"]:checked').value === 'custom';
+    if (isCustom) {
+      inlineCustomInput.removeAttribute('disabled');
+      inlineStart.disabled = false;
+      inlineEnd.disabled = false;
+      inlineSave.disabled = false;
+    } else {
+      inlineCustomInput.setAttribute('disabled', '');
+      inlineStart.disabled = true;
+      inlineEnd.disabled = true;
+      inlineSave.disabled = true;
+    }
+  }
+
+  inlineRadios.forEach(radio => {
+    radio.addEventListener('change', updateInlineCustomState);
+  });
+
+  // Display custom delimiter inputs
+  const displayRadios = document.querySelectorAll('input[name="displayDelimiter"]');
+  const displayCustomInput = document.getElementById('displayCustomInput');
+  const displayStart = document.getElementById('displayStart');
+  const displayEnd = document.getElementById('displayEnd');
+  const displaySave = document.getElementById('displaySave');
+
+  function updateDisplayCustomState() {
+    const isCustom = document.querySelector('input[name="displayDelimiter"]:checked').value === 'custom';
+    if (isCustom) {
+      displayCustomInput.removeAttribute('disabled');
+      displayStart.disabled = false;
+      displayEnd.disabled = false;
+      displaySave.disabled = false;
+    } else {
+      displayCustomInput.setAttribute('disabled', '');
+      displayStart.disabled = true;
+      displayEnd.disabled = true;
+      displaySave.disabled = true;
+    }
+  }
+
+  displayRadios.forEach(radio => {
+    radio.addEventListener('change', updateDisplayCustomState);
+  });
 });

@@ -7,6 +7,13 @@
   --accent-hover: #2563eb;
   --border: #d1d5db;
 
+  --muted: #6b7280;
+  --focus-ring: color-mix(in srgb, var(--accent) 35%, transparent);
+
+  --control-bg: color-mix(in srgb, var(--bg) 85%, white);
+  --control-border: var(--border);
+  --control-bg-hover: color-mix(in srgb, var(--control-bg) 85%, var(--accent) 15%);
+
   --radius: 6px;
   --icon-stroke: #1f2937;
   --icon-hover: #2563eb;
@@ -21,6 +28,8 @@
     --accent-hover: #60a5fa;
     --border: #3a3c43;
     --icon-stroke: #e4e6eb;
+    --muted: #a1a1aa;
+    --control-bg: color-mix(in srgb, var(--bg) 90%, white);
   }
 }
 
@@ -73,10 +82,11 @@ body {
 }
 
 body.expanded {
-  max-height: 600px;
-  min-height: 220px; /* El que  cal anar modificant al afegir opcions de configuració (que ocupen espai vertical) */
+  max-height: 650px;
+  min-height: 510px; /* El que  cal anar modificant al afegir opcions de configuració (que ocupen espai vertical) */
   height: auto;
-  overflow: visible;
+  /* overflow: visible; */
+  overflow-y: auto;
 }
 
 h3 {
@@ -84,6 +94,19 @@ h3 {
   font-size: 1.1rem;
   text-align: center;
   margin-bottom: 15px;
+}
+
+h4 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+h5 {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fg);
 }
 
 
@@ -123,6 +146,7 @@ h3 {
   right: 0;
   bottom: 0;
   background-color: #04622E;
+  /* background-color: var(--border); */
   transition: 0.3s;
   border-radius: 26px;
 }
@@ -140,7 +164,8 @@ h3 {
 }
 
 input:checked + .slider {
-  background-color: #1D9EAE;
+  /* background-color: #1D9EAE; */
+  background-color: var(--accent);
 }
 
 input:checked + .slider:before {
@@ -191,12 +216,21 @@ input:checked + .slider:before {
   left: 0;
   background: var(--bg);
   color: var(--fg);
+  /* border: 1px solid var(--border); */
   border-radius: var(--radius);
   padding: 10px 16px;
   min-width: 180px;
-  max-height: 320px;
+  max-height: 350px;
   overflow-y: auto;
   z-index: 10;
+}
+
+.settings-section {
+  padding: 10px 0;
+}
+
+.settings-first-section {
+  padding: 0;
 }
 
 .settings-checkbox, .theme-radio {
@@ -205,6 +239,10 @@ input:checked + .slider:before {
   gap: 8px;
   font-size: 0.97rem;
   cursor: pointer;
+}
+
+.settings-checkbox {
+  user-select: none;
 }
 
 .theme-radio-group {
@@ -226,4 +264,62 @@ input:checked + .slider:before {
   width: 16px;
   height: 16px;
   transition: outline-color 0.2s;
+}
+
+/* ================= DELIMITERS UI ================= */
+
+.two-column-container {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+.column {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
+  color: var(--fg);
+  font-size: 0.92rem;
+  line-height: 1.2;
+}
+
+.select:hover {
+  background: var(--control-bg-hover);
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.text-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+  color: var(--accent-hover);
 }

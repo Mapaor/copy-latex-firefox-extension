@@ -73,14 +73,23 @@
 		return null;
 	}
 
-	function findAnnotationTex(el) {
-		// New ChatGPT KaTeX rendering
-		const mathEl = el?.closest?.('[role="math"]');
-		if (mathEl) {
-				const source = mathEl.getAttribute('data-math-source') || mathEl.getAttribute('aria-label');
-				if (source && source.trim()) return source.trim();
+	function findChatGPTTex(el) {
+		// New ChatGPT Katex rendering
+		const katexEl = el?.closest?.('.katex');
+		if (!katexEl) return null;
+
+		const mathSource = katexEl
+			.closest('[data-math-source]')
+			?.getAttribute('data-math-source');
+
+		if (mathSource?.trim()) {
+			return mathSource.trim();
 		}
 
+		return null;
+	}
+
+	function findAnnotationTex(el) {
 		// Typical Katex rendering
 		const katexEl = el?.closest?.('.katex');
 		if (!katexEl) return null;
@@ -175,6 +184,7 @@
 		findKaTeXElementFromEventTarget,
 		findMathJaxTex,
 		findGoogleAIMathTex,
+		findChatGPTTex,
 	};
 })();
 

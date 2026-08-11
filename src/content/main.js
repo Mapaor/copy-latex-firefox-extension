@@ -55,7 +55,7 @@
 
 		const katex = ns.detect.findKaTeXElementFromEventTarget(e.target);
 		if (katex) {
-			const tex = ns.detect.findAnnotationTex(katex);
+			const tex = ns.detect.findChatGPTTex(katex) || ns.detect.findAnnotationTex(katex);
 			if (tex) {
 				showOverlayForTarget(katex, tex);
 				return;
@@ -167,7 +167,7 @@
 
 		const katex = ns.detect.findKaTeXElementFromEventTarget(e.target);
 		if (katex) {
-			const tex = ns.detect.findAnnotationTex(katex);
+			const tex = ns.detect.findChatGPTTex(katex) || ns.detect.findAnnotationTex(katex);
 			if (tex) {
 				const now = Date.now();
 				if (ns.state.lastCopiedTex === tex && now - ns.state.lastCopyGestureTs < 700) return;

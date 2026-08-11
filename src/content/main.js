@@ -55,7 +55,7 @@
 
 		const katex = ns.detect.findKaTeXElementFromEventTarget(e.target);
 		if (katex) {
-			const tex = ns.detect.findChatGPTTex(katex) || ns.detect.findAnnotationTex(katex);
+			const tex = ns.detect.findAnnotationTex(katex);
 			if (tex) {
 				showOverlayForTarget(katex, tex);
 				return;
@@ -64,9 +64,9 @@
 
 		const dataMathEl = e.target.closest?.('[data-math]');
 		if (dataMathEl) {
-			const tex = dataMathEl.getAttribute('data-math');
-			if (tex && tex.trim()) {
-				showOverlayForTarget(dataMathEl, tex.trim());
+			const tex = ns.detect.findDataMathTex(dataMathEl);
+			if (tex) {
+				showOverlayForTarget(dataMathEl, tex);
 				return;
 			}
 		}
@@ -167,7 +167,7 @@
 
 		const katex = ns.detect.findKaTeXElementFromEventTarget(e.target);
 		if (katex) {
-			const tex = ns.detect.findChatGPTTex(katex) || ns.detect.findAnnotationTex(katex);
+			const tex = ns.detect.findAnnotationTex(katex);
 			if (tex) {
 				const now = Date.now();
 				if (ns.state.lastCopiedTex === tex && now - ns.state.lastCopyGestureTs < 700) return;
@@ -180,7 +180,7 @@
 
 		const dataMathEl = e.target.closest?.('[data-math]');
 		if (dataMathEl) {
-			const tex = dataMathEl.getAttribute('data-math');
+			const tex = ns.detect.findDataMathTex(dataMathEl);
 			if (tex) {
 				ns.output.copyLatex(tex);
 				return;

@@ -3,6 +3,8 @@
 // Only exposes `convertAndCopyHtml` on globalThis.
 
 (() => {
+  const ns = (window.CopyLatex = window.CopyLatex || {});
+
   async function convertAndCopyHtml(html) {
     try {
       const markdown = await convertHtmlToLatexMarkdown(html);
@@ -46,7 +48,7 @@
 
     // 2) Replace math elements with LaTeX markers ($..$ or $$...$$)
     mathElements.forEach((el) => {
-      const latex = extractLatexFromElement(el);
+      const latex = ns.detect.findTexFromMathElement(el);
       if (!latex) return;
 
       const displayMode = getDisplayMode(el);
@@ -132,66 +134,6 @@
     markdown = markdown.trim();
 
     return markdown;
-  }
-
-  // Extract LaTeX replicating the logic from detection.js
-  // TODO One day: Unify this detection logic using the same as detection.js
-  function extractLatexFromElement(el) {
-    // Wikipedia
-    if (el.tagName === 'IMG' && el.classList.contains('mwe-math')) {
-      const alt = el.getAttribute('alt');
-      if (alt) {
-        const match = alt.match(/^\{\\displaystyle\s*([\s\S]*?)\}$/);
-        return match && match[1] ? match[1].trim() : alt.trim();
-      }
-    }
-
-    // KaTeX
-    if (el.classList.contains('katex')) {
-      const ann = el.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
-      if (ann && ann.textContent) return ann.textContent.trim();
-
-      return (
-        el.getAttribute('data-tex') ||
-        el.getAttribute('data-latex') ||
-        el.getAttribute('aria-label') ||
-        null
-      );
-    }
-
-    // Gemini (data-math attribute)
-    if (el.hasAttribute('data-math')) {
-      const dataMath = el.getAttribute('data-math');
-      if (dataMath && dataMath.trim()) return dataMath.trim();
-    }
-
-    // MathJax v3/v4
-    if (el.tagName === 'MJX-CONTAINER') {
-      // Try global variable set by page script
-      const globalLatex = window.__lastMathJaxV3Latex;
-      if (globalLatex) return globalLatex;
-
-      // Fallback to script element
-      const sibling = el.nextElementSibling;
-      if (sibling && sibling.tagName === 'SCRIPT') {
-        const scriptEl = sibling;
-        if (scriptEl.type && scriptEl.type.includes('math/tex')) {
-          return sibling.textContent?.trim() || null;
-        }
-      }
-    }
-
-    // MathJax v2
-    const sibling = el.nextElementSibling;
-    if (sibling && sibling.tagName === 'SCRIPT') {
-      const scriptEl = sibling;
-      const type = scriptEl.type;
-      if (type === 'math/tex' || type === 'math/tex; mode=display') {
-        return sibling.textContent?.trim() || null;
-      }
-    }
-
-    return null;
   }
 
   // Determine if math should be inline or display mode

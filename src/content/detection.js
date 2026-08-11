@@ -73,22 +73,6 @@
 		return null;
 	}
 
-	function findChatGPTTex(el) {
-		// New ChatGPT Katex rendering
-		const katexEl = el?.closest?.('.katex');
-		if (!katexEl) return null;
-
-		const mathSource = katexEl
-			.closest('[data-math-source]')
-			?.getAttribute('data-math-source');
-
-		if (mathSource?.trim()) {
-			return mathSource.trim();
-		}
-
-		return null;
-	}
-
 	function findAnnotationTex(el) {
 		// Typical Katex rendering
 		const katexEl = el?.closest?.('.katex');
@@ -105,7 +89,25 @@
 			katexEl.getAttribute('aria-label');
 		if (dataLatex && dataLatex.trim()) return dataLatex.trim();
 
+		// Fallback for the current ChatGPT DOM: the original LaTeX is stored on
+		// an ancestor of the KaTeX element.
+		const mathSource = katexEl
+			.closest('[data-math-source]')
+			?.getAttribute('data-math-source');
+
+		if (mathSource && mathSource.trim()) {
+			return mathSource.trim();
+		}
+
 		return null;
+	}
+
+	function findDataMathTex(el) {
+		const dataMathEl = el?.closest?.('[data-math]');
+		if (!dataMathEl) return null;
+
+		const dataMath = dataMathEl.getAttribute('data-math');
+		return dataMath && dataMath.trim() ? dataMath.trim() : null;
 	}
 
 	function findKaTeXElementFromEventTarget(target) {
@@ -176,15 +178,30 @@
 		return latex && latex.trim() ? latex.trim() : null;
 	}
 
+	// Extract source from an already identified math element. This shared entrypoint
+	// is also used for detached DOM fragments created by selection copying.
+	function findTexFromMathElement(el) {
+		if (!el) return null;
+
+		return (
+			findWikipediaTex(el) ||
+			findAnnotationTex(el) ||
+			findDataMathTex(el) ||
+			findMathJaxV3Tex(el) ||
+			findMathJaxTex(el)
+		);
+	}
+
 	ns.detect = {
 		isWikipedia,
 		findWikipediaTex,
 		findMathJaxV3Tex,
 		findAnnotationTex,
+		findDataMathTex,
 		findKaTeXElementFromEventTarget,
 		findMathJaxTex,
 		findGoogleAIMathTex,
-		findChatGPTTex,
+		findTexFromMathElement,
 	};
 })();
 

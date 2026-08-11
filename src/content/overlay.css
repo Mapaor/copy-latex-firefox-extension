@@ -81,6 +81,11 @@ mjx-container.hoverlatex-hover {
 	cursor: pointer;
 }
 
+[data-xpm-latex].hoverlatex-hover,
+[data-xpm-copy-root].hoverlatex-hover {
+	cursor: pointer;
+}
+
 .MathJax_Display.hoverlatex-hover,
 .MathJax.hoverlatex-hover,
 .mjx-chtml.hoverlatex-hover,

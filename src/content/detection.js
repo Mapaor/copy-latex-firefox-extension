@@ -19,6 +19,11 @@
 		);
 	}
 
+	function isGoogleSearch() {
+		const hostname = window.location.hostname;
+		return hostname === 'www.google.com' || hostname.endsWith('.google.com') || hostname.startsWith('www.google.');
+	}
+
 	function findWikipediaTex(el) {
     // Only work on Wikipedia/Wikiwand sites
 		if (!isWikipedia()) return null;
@@ -141,6 +146,19 @@
 		return null;
 	}
 
+	function findGoogleAIMathTex(el) {
+		if (!isGoogleSearch()) return null;
+		if (!(el instanceof Element)) return null;
+
+		const latexEl =
+			el.closest?.('[data-xpm-copy-root][data-xpm-latex]') ||
+			el.closest?.('[data-xpm-latex]');
+		if (!latexEl) return null;
+
+		const latex = latexEl.getAttribute('data-xpm-latex');
+		return latex && latex.trim() ? latex.trim() : null;
+	}
+
 	ns.detect = {
 		isWikipedia,
 		findWikipediaTex,
@@ -148,6 +166,7 @@
 		findAnnotationTex,
 		findKaTeXElementFromEventTarget,
 		findMathJaxTex,
+		findGoogleAIMathTex,
 	};
 })();
 

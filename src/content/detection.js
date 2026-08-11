@@ -74,6 +74,14 @@
 	}
 
 	function findAnnotationTex(el) {
+		// New ChatGPT KaTeX rendering
+		const mathEl = el?.closest?.('[role="math"]');
+		if (mathEl) {
+				const source = mathEl.getAttribute('data-math-source') || mathEl.getAttribute('aria-label');
+				if (source && source.trim()) return source.trim();
+		}
+
+		// Typical Katex rendering
 		const katexEl = el?.closest?.('.katex');
 		if (!katexEl) return null;
 

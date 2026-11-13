@@ -200,7 +200,7 @@
 		return candidates;
 	}
 
-	// Display mode is renderer-specific: class/attribute for most renderers, layout for KaTeX.
+	// Use renderer markup/attributes; a block-level parent alone doesn't imply display math.
 	function getDisplayMode(el, kind) {
 		if (
 			kind === 'wikipedia' &&
@@ -213,12 +213,7 @@
 		}
 		if (kind === 'mathjax-v3' && el.hasAttribute('display')) return 'display';
 
-		if (kind === 'katex') {
-			if (el.parentElement?.classList.contains('katex-display')) return 'display';
-			if (el.parentElement && window.getComputedStyle(el.parentElement).display === 'block') {
-				return 'display';
-			}
-		}
+		if (kind === 'katex' && el.closest('.katex-display')) return 'display';
 		if (kind === 'data-math') {
 			// This renderer uses DIV for block equations and inline elements otherwise.
 			return isHtmlElementNamed(el, 'div') ? 'display' : 'inline';

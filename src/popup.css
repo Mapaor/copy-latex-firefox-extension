@@ -9,7 +9,7 @@
   --border: #c9cdd2;
   --control-blue: #0060df;
   --switch-color: #1d9eae;
-  --icon-hover-background: #e8f0fe;
+  --icon-hover-background: #f0f1f2;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +20,7 @@
     --text-color: #f1f3f5;
     --muted: #aeb4bb;
     --border: #535960;
-    --icon-hover-background: #232a3a;
+    --icon-hover-background: #292c30;
   }
 }
 
@@ -31,7 +31,7 @@ body.theme-light {
   --text-color: #2c2f33;
   --muted: #6f747b;
   --border: #c9cdd2;
-  --icon-hover-background: #e8f0fe;
+  --icon-hover-background: #f0f1f2;
 }
 
 body.theme-dark {
@@ -41,7 +41,7 @@ body.theme-dark {
   --text-color: #f1f3f5;
   --muted: #aeb4bb;
   --border: #535960;
-  --icon-hover-background: #232a3a;
+  --icon-hover-background: #292c30;
 }
 
 * {
@@ -162,7 +162,6 @@ label {
 
 .settings-icon:hover {
   background: var(--icon-hover-background);
-  color: var(--control-blue);
 }
 
 .settings-icon svg {
@@ -261,52 +260,6 @@ label {
 }
 
 
-.choice input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  opacity: 0;
-}
-
-.choice input[type="radio"] {
-  position: static;
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
-  overflow: visible;
-  margin: 0;
-  opacity: 1;
-  accent-color: var(--control-blue);
-}
-
-.checkbox-visual {
-  position: relative;
-  display: block;
-  width: 14px;
-  height: 14px;
-  flex: 0 0 14px;
-  border: 1px solid #92979d;
-  border-radius: 3px;
-  background: var(--surface);
-}
-
-.choice input:checked + .checkbox-visual {
-  border-color: var(--control-blue);
-  background: var(--control-blue);
-}
-
-.choice input:checked + .checkbox-visual::after {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 6px;
-  height: 3px;
-  border-bottom: 1.5px solid #fff;
-  border-left: 1.5px solid #fff;
-  content: "";
-  transform: rotate(-45deg);
-}
 
 
 .page-navigation {
@@ -335,7 +288,6 @@ label {
 
 .page-navigation button:hover {
   background: var(--icon-hover-background);
-  color: var(--control-blue);
 }
 
 .page-navigation button svg {
@@ -377,7 +329,6 @@ label {
 
 .external-links a:hover {
   background: var(--icon-hover-background);
-  color: var(--control-blue);
 }
 
 .external-links svg {
@@ -391,12 +342,13 @@ label {
   fill: none;
 }
 
-:focus-visible {
+.settings-icon:focus-visible,
+.page-navigation button:focus-visible {
   outline: 2px solid var(--control-blue);
   outline-offset: 2px;
 }
 
-.choice:has(input[type="checkbox"]:focus-visible) .checkbox-visual {
+.format-switch input:focus-visible + .switch-track {
   outline: 2px solid var(--control-blue);
   outline-offset: 2px;
 }

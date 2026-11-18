@@ -47,13 +47,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-  const showOverlayOption = document.getElementById('showOverlayOption');
-  showOverlayOption.checked = preferences.showOverlay === undefined
-    ? true
-    : !!preferences.showOverlay;
-  showOverlayOption.addEventListener('change', async () => {
-    await browser.storage.local.set({ showOverlay: showOverlayOption.checked });
-  });
+  const overlayModeOptions = document.querySelectorAll('input[name="overlayMode"]');
+  const overlayMode = preferences.showOverlay === false ? 'context-menu' : 'show';
+  for (const option of overlayModeOptions) {
+    option.checked = option.value === overlayMode;
+    option.addEventListener('change', async () => {
+      if (!option.checked) return;
+      await browser.storage.local.set({ showOverlay: option.value === 'show' });
+    });
+  }
 
   const contextMenuOption = document.getElementById('contextMenuOption');
   contextMenuOption.checked = preferences.showContextMenu === undefined

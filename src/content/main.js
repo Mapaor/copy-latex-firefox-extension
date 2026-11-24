@@ -153,6 +153,7 @@
 
 	// Hovering
 	document.addEventListener('mouseover', (event) => {
+		if (!event.isTrusted) return;
 		if (!ns.state.showOverlay) return;
 
 		const currentTarget = ns.state.currentTarget;
@@ -177,6 +178,7 @@
 
 	// Not hovering anymore
 	document.addEventListener('mouseout', (event) => {
+		if (!event.isTrusted) return;
 		const currentTarget = ns.state.currentTarget;
 		if (!currentTarget) return;
 

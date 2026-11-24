@@ -56,6 +56,7 @@
 	// If conversion fails, the browser can still copy the selected text
 	// output.js changes the clipboard text during the copy event
 	document.addEventListener('keydown', (event) => {
+		if (!event.isTrusted) return;
 		if (
 			!overrideSelectionCopy ||
 			event.defaultPrevented ||
@@ -79,6 +80,7 @@
 
 	// Only change the copy event after Ctrl+C or Command+C (when a page selection is active)
 	document.addEventListener('copy', (event) => {
+		if (!event.isTrusted) return;
 		if (!pendingSelectionCopyShortcut) return;
 		clearPendingSelectionCopyShortcut();
 		if (!overrideSelectionCopy || isEditableTarget(event.target) || event.defaultPrevented) return;
